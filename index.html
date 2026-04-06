@@ -1,0 +1,2675 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Software Modelling Revision Guide</title>
+  <style>
+    :root {
+      --bg: #f6f1e7;
+      --paper: #fffdfa;
+      --panel: #f2ead9;
+      --ink: #1f2b2f;
+      --soft-ink: #55656b;
+      --accent: #0c6f68;
+      --accent-strong: #084e49;
+      --accent-warm: #b65a2a;
+      --line: #dccfb9;
+      --ok: #2f7d59;
+      --warn: #9f5b23;
+      --shadow: 0 18px 45px rgba(31, 43, 47, 0.08);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --content-width: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(12, 111, 104, 0.08), transparent 22rem),
+        radial-gradient(circle at top right, rgba(182, 90, 42, 0.09), transparent 18rem),
+        linear-gradient(180deg, #fbf7ef 0%, #f4ecdc 100%);
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--accent-strong);
+    }
+
+    .page {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 1.2rem;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(140deg, rgba(12, 111, 104, 0.96), rgba(8, 78, 73, 0.98));
+      color: #fdfbf5;
+      border-radius: 28px;
+      padding: 2rem 1.5rem 1.7rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -2rem;
+      top: -2rem;
+      width: 14rem;
+      height: 14rem;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.83rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.7rem;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      line-height: 1.2;
+      margin-top: 0;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin-bottom: 0.5rem;
+      max-width: 12ch;
+    }
+
+    .hero p {
+      margin: 0.4rem 0;
+      max-width: 58rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1.7fr 1fr;
+      align-items: end;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-note {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero-note strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 0.98rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 1.2rem;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 1rem;
+      max-height: calc(100vh - 2rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+      scrollbar-width: thin;
+      scrollbar-color: #a9bdb9 transparent;
+      background: rgba(255, 253, 250, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: #bfd1cd;
+      border-radius: 999px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover {
+      background: #9fb8b2;
+      background-clip: padding-box;
+    }
+
+    .sidebar h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .sidebar-group {
+      margin: 1rem 0 0.45rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+      font-weight: 800;
+    }
+
+    .sidebar-note {
+      font-size: 0.88rem;
+      color: var(--soft-ink);
+      background: linear-gradient(180deg, #fffaf0 0%, #f8efe0 100%);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.8rem 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .nav-toggle {
+      display: none;
+      width: 100%;
+      margin: 0 0 1rem;
+      padding: 0.9rem 1rem;
+      border: 0;
+      border-radius: 16px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar nav {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: var(--ink);
+      padding: 0.58rem 0.7rem;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .sidebar a:hover,
+    .sidebar a:focus,
+    .sidebar a.active {
+      background: var(--panel);
+      transform: translateX(3px);
+      outline: none;
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .content {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .section-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 1.3rem;
+      box-shadow: var(--shadow);
+    }
+
+    .section-card h2 {
+      font-size: clamp(1.55rem, 2vw, 2rem);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-intro {
+      color: var(--soft-ink);
+      margin-bottom: 1rem;
+      max-width: 70ch;
+    }
+
+    .callout {
+      border-left: 5px solid var(--accent-warm);
+      padding: 0.85rem 1rem;
+      background: #fff7f1;
+      border-radius: 0 14px 14px 0;
+      margin: 1rem 0;
+    }
+
+    .callout strong {
+      color: #7c3919;
+    }
+
+    .grid-two,
+    .grid-three {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .grid-two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mini-card {
+      background: linear-gradient(180deg, #fffdfa 0%, #fcf4e8 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+    }
+
+    .mini-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .mini-card p,
+    .mini-card ul,
+    .mini-card ol {
+      margin-bottom: 0;
+    }
+
+    ul, ol {
+      padding-left: 1.2rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      margin: 1rem 0 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.85rem 0.9rem;
+      border-bottom: 1px solid #e9ddc9;
+      vertical-align: top;
+    }
+
+    th {
+      background: #e5f0ee;
+      color: #133536;
+      font-size: 0.95rem;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 0.8rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      background: #ecf4f3;
+      border: 1px solid #cfe3df;
+      color: #194543;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .topic-section {
+      scroll-margin-top: 1rem;
+    }
+
+    .topic-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: end;
+      margin-bottom: 1rem;
+    }
+
+    .topic-header .tag {
+      background: #eef5ef;
+      color: var(--ok);
+      border: 1px solid #d1ead9;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .topic-blocks {
+      display: grid;
+      gap: 0.9rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .topic-block {
+      background: #fffdf7;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1rem;
+    }
+
+    .topic-block h3 {
+      font-size: 1.03rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .topic-block pre {
+      margin: 0.7rem 0 0;
+      padding: 0.9rem;
+      border-radius: 14px;
+      background: #1f2729;
+      color: #f7f4ec;
+      overflow-x: auto;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .quiz-box {
+      margin-top: 1rem;
+      background: #f9f5ec;
+      border: 1px dashed #ccbda5;
+      border-radius: 18px;
+      padding: 1rem;
+    }
+
+    .quiz-box h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .quiz-box details {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.7rem 0.85rem;
+      margin-top: 0.8rem;
+    }
+
+    .quiz-box summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--accent-strong);
+    }
+
+    .quiz-box summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .quiz-box summary::before {
+      content: "+";
+      margin-right: 0.5rem;
+      color: var(--accent-warm);
+      font-weight: 700;
+    }
+
+    .quiz-box details[open] summary::before {
+      content: "−";
+    }
+
+    .exam-pattern {
+      margin-top: 1rem;
+      padding: 0.95rem 1rem;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #edf6f5 0%, #f8fbfb 100%);
+      border: 1px solid #d2e3e0;
+    }
+
+    .exam-pattern h3 {
+      margin-bottom: 0.45rem;
+    }
+
+    .badge-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.75rem;
+    }
+
+    .badge {
+      background: #f7ede8;
+      color: #884422;
+      border: 1px solid #ebc5b3;
+      border-radius: 999px;
+      padding: 0.32rem 0.62rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .steps {
+      list-style: none;
+      margin: 0.8rem 0 0;
+      padding: 0;
+      counter-reset: study-step;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .steps li {
+      counter-increment: study-step;
+      position: relative;
+      padding: 0.8rem 0.9rem 0.8rem 3rem;
+      border-radius: 14px;
+      background: #faf5ea;
+      border: 1px solid var(--line);
+    }
+
+    .steps li::before {
+      content: counter(study-step);
+      position: absolute;
+      left: 0.8rem;
+      top: 0.78rem;
+      width: 1.45rem;
+      height: 1.45rem;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .focus-grid {
+      display: grid;
+      gap: 0.9rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 1rem;
+    }
+
+    .focus-card {
+      background: linear-gradient(180deg, #f3f8f7 0%, #fffdf8 100%);
+      border: 1px solid #d7e5e2;
+      border-radius: 18px;
+      padding: 1rem;
+    }
+
+    .focus-card h3 {
+      margin-bottom: 0.45rem;
+    }
+
+    .answer-frame {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #eff5f4 0%, #f9fbfb 100%);
+      border: 1px solid #d0e2df;
+    }
+
+    .answer-frame h3 {
+      margin-bottom: 0.45rem;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--soft-ink);
+      font-size: 0.92rem;
+      padding: 0.3rem 0 2rem;
+    }
+
+    @media (max-width: 1080px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        max-height: none;
+        overflow: visible;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .hero-grid,
+      .grid-two,
+      .grid-three,
+      .topic-blocks,
+      .focus-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .sidebar.open {
+        display: block;
+      }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        font-size: 16px;
+        line-height: 1.72;
+      }
+
+      .hero {
+        padding: 1.45rem 1rem 1.2rem;
+      }
+
+      .hero h1 {
+        font-size: clamp(1.85rem, 7vw, 2.35rem);
+        max-width: none;
+      }
+
+      .eyebrow {
+        font-size: 0.72rem;
+      }
+
+      .section-card {
+        padding: 1rem;
+      }
+
+      .section-intro,
+      .mini-card p,
+      .topic-block p,
+      .focus-card p,
+      .callout,
+      .answer-frame,
+      .quiz-box {
+        font-size: 0.98rem;
+      }
+
+      .mini-card,
+      .topic-block,
+      .focus-card,
+      .answer-frame,
+      .quiz-box,
+      .exam-pattern {
+        padding: 0.95rem;
+      }
+
+      .pill {
+        font-size: 0.86rem;
+      }
+
+      .table-wrap {
+        overflow: visible;
+        border: none;
+        background: transparent;
+      }
+
+      .table-wrap table {
+        min-width: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+
+      .table-wrap thead {
+        display: none;
+      }
+
+      .table-wrap tr {
+        display: block;
+        margin-bottom: 0.9rem;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        overflow: hidden;
+        background: #fffdfa;
+        box-shadow: var(--shadow);
+      }
+
+      .table-wrap tbody td {
+        display: grid;
+        grid-template-columns: minmax(7.2rem, 42%) 1fr;
+        gap: 0.8rem;
+        align-items: start;
+        white-space: normal;
+        width: 100%;
+        padding: 0.78rem 0.9rem;
+      }
+
+      .table-wrap tbody td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--accent-strong);
+      }
+
+      .table-wrap tbody td:last-child {
+        border-bottom: none;
+      }
+
+      pre,
+      .topic-block pre {
+        font-size: 0.82rem;
+        padding: 0.8rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .page {
+        padding: 0.8rem;
+      }
+
+      .hero,
+      .section-card {
+        border-radius: 22px;
+      }
+
+      th, td {
+        padding: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Beginner-first exam guide</span>
+          <h1>Advanced Software Modelling</h1>
+          <p>This guide is built to take you from weak confidence to exam-ready. It is designed for <strong>active revision</strong>, not passive reading, so each topic includes quick recall and exam-focused guidance.</p>
+          <p><strong>Evidence base used:</strong> the folder currently contains one mock exam paper and the same paper again with its marking scheme. No separate lecture slides or lecture notes were present when this guide was built, so the topics below are limited to what is actually supported by those materials.</p>
+        </div>
+        <aside class="hero-note">
+          <strong>Best way to use this page</strong>
+          <p>Read one topic, close the notes, answer the quick quiz, open the short answers, then attempt the exam guidance for that topic. Return later and do it again from memory.</p>
+        </aside>
+      </div>
+    </header>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Show guide contents</button>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar">
+        <h2>Guide Contents</h2>
+        <div class="sidebar-note">Keep this guide open like a tutor notebook: learn the term, test yourself, then practise the answer shape.</div>
+
+        <div class="sidebar-group">Start Here</div>
+        <nav>
+          <a href="#how-to-use">How to Use This Guide</a>
+          <a href="#past-paper-bank">Past Paper Question Bank</a>
+          <a href="#blackboard-structure">Official Topic Blocks</a>
+          <a href="#exam-format">Exam Format / Strategy</a>
+          <a href="#priority-map">Topic Priority Map</a>
+          <a href="#study-order">3-Week Study Order</a>
+          <a href="#glossary">Starter Glossary</a>
+        </nav>
+
+        <div class="sidebar-group">Core Topics</div>
+        <nav>
+          <a href="#core-topics">Core Topic Sections</a>
+          <a href="#topic-uml">UML Class Diagrams</a>
+          <a href="#topic-ocl">Object Constraint Language</a>
+          <a href="#topic-concurrency">Concurrency and Multithreading</a>
+          <a href="#topic-fsm">Finite State Machines</a>
+          <a href="#topic-cfg">Context-Free Grammars and Parsing</a>
+          <a href="#topic-compiler">Lexical Analysis and Symbol Tables</a>
+          <a href="#topic-parser-tools">Parser Generators and Tool Support</a>
+          <a href="#topic-quality">Software Quality and High-Integrity Systems</a>
+          <a href="#topic-metrics">Software Metrics, GQM, and Scale Types</a>
+          <a href="#topic-solid">SOLID Principles</a>
+          <a href="#topic-cicd">CI/CD Pipeline</a>
+        </nav>
+
+        <div class="sidebar-group">Exam Preparation</div>
+        <nav>
+          <a href="#diagrams">Key Diagrams and Flows</a>
+          <a href="#exam-technique">Exam Technique</a>
+          <a href="#rapid-review">Rapid Review</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <section class="section-card" id="how-to-use">
+          <h2>How to Use This Guide</h2>
+          <p class="section-intro">If you are starting from low confidence, the goal is to build meaning first and speed later. Do not try to memorise everything in one go.</p>
+          <div class="grid-three">
+            <div class="mini-card">
+              <h3>Step 1: Learn one topic</h3>
+              <p>Read one topic section slowly. Focus on the plain-English explanation and the key terms before worrying about formal detail.</p>
+            </div>
+            <div class="mini-card">
+              <h3>Step 2: Close the notes</h3>
+              <p>After reading, stop looking at the page and answer the five quick quiz questions from memory. This is where real learning happens.</p>
+            </div>
+            <div class="mini-card">
+              <h3>Step 3: Check and apply</h3>
+              <p>Open the short answers, fix any gaps, then use the exam-answer pattern to see what a mark-winning response should look like.</p>
+            </div>
+          </div>
+          <div class="callout">
+            <strong>Recommended active-revision loop:</strong> read one topic, learn the core terms, close notes, answer the quick questions, check the answers, attempt the exam question structure, then return later for spaced repetition.
+          </div>
+          <div class="pill-row">
+            <span class="pill">Read one topic</span>
+            <span class="pill">Close notes</span>
+            <span class="pill">Answer quick questions</span>
+            <span class="pill">Check answers</span>
+            <span class="pill">Attempt exam question</span>
+            <span class="pill">Return later</span>
+          </div>
+        </section>
+
+        <section class="section-card" id="past-paper-bank">
+          <h2>Past Paper Question Bank</h2>
+          <p class="section-intro">The folder currently contains one mock paper and the same paper again with a marking scheme. That still gives us a very useful question bank because we can see both what was asked and exactly where marks were awarded.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Question</th>
+                  <th>Main topic</th>
+                  <th>Sub-parts and marks</th>
+                  <th>What this means for revision</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Q1</strong></td>
+                  <td>UML and OCL</td>
+                  <td>Diagram 6, invariants 6, pre/postconditions 6, structural vs behavioural 3, OCL advantages 4.</td>
+                  <td>You need both notation and explanation. This is not only a diagram question.</td>
+                </tr>
+                <tr>
+                  <td><strong>Q2</strong></td>
+                  <td>Concurrency</td>
+                  <td>Synchronization 5, race condition 5, two mechanisms 6, thread pool 5, excessive threading 4.</td>
+                  <td>This is a very structured explanation question family and a good scoring choice if you know the definitions.</td>
+                </tr>
+                <tr>
+                  <td><strong>Q3</strong></td>
+                  <td>FSMs</td>
+                  <td>FSM basics 5, DFA vs NFA 4, design DFSM 6, explain language 5, memory reasoning 5.</td>
+                  <td>You need to define, design, and reason about what the machine remembers.</td>
+                </tr>
+                <tr>
+                  <td><strong>Q4</strong></td>
+                  <td>CFGs and compiler basics</td>
+                  <td>Derivation 2, precedence 2, grammar strings 3, parse tree 3, lexical analysis 3, symbol table 4, regex limit 3, bottom-up parser 2, tokenisation 3.</td>
+                  <td>This question rewards lots of short accurate answers, so definitions and worked steps matter.</td>
+                </tr>
+                <tr>
+                  <td><strong>Q5</strong></td>
+                  <td>Reliability, testing, and quality</td>
+                  <td>Risks 4, fault tolerance 4, testing types 4, verification/validation 6, metrics 5, unit testing 2.</td>
+                  <td>This is a scenario-application question. Do not answer it as pure theory.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="focus-grid">
+            <div class="focus-card">
+              <h3>What the mark scheme keeps rewarding</h3>
+              <ul>
+                <li>Definition first, then application.</li>
+                <li>The exact number of requested points or examples.</li>
+                <li>Complete diagrams or complete formal statements, not half-finished ones.</li>
+                <li>Scenario links, especially in concurrency and quality questions.</li>
+                <li>Clarity and correctness over fancy wording.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>Best question-family choices for a beginner</h3>
+              <ul>
+                <li><strong>Good first strength:</strong> concurrency, because the structure is predictable.</li>
+                <li><strong>Good second strength:</strong> quality/testing, because strong examples help a lot.</li>
+                <li><strong>High-value long-term strength:</strong> UML/OCL or FSMs, because they are central to the module evidence in the folder.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card" id="blackboard-structure">
+          <h2>Official Topic Blocks</h2>
+          <p class="section-intro">This section organises the guide around the module's official topic blocks, so the revision plan reflects the real teaching structure rather than only one mock paper.</p>
+
+          <div class="grid-two">
+            <div class="mini-card">
+              <h3>Topic 1: Formal Specification</h3>
+              <p>This matches the modelling-heavy part of the guide, especially UML and OCL. In the current exam evidence, this is most visible in the class-diagram and OCL question.</p>
+              <ul>
+                <li>Main guide links: UML Class Diagrams, OCL.</li>
+                <li>Strong direct mock-paper evidence: yes.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>Topic 2: Concurrency</h3>
+              <p>This maps directly to the multithreading question: shared resources, race conditions, synchronization, thread pools, and performance.</p>
+              <ul>
+                <li>Week 6: Concurrency and Parallelism in Software Systems.</li>
+                <li>Week 7: Managing Threads, Priorities, and Coordination.</li>
+                <li>Week 8: Advanced Synchronization, Semaphores, and Scheduling.</li>
+                <li>Week 9: Deadlock.</li>
+                <li>Week 10: Thread pools.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>Topic 3: Languages &amp; Reasoning</h3>
+              <p>This matches FSMs, grammars, parsing, lexical analysis, tokenisation, and symbol tables. In other words, the formal-language and compiler-style reasoning part of the module.</p>
+              <ul>
+                <li>Week 11: Finite State Machines and Automata Theory.</li>
+                <li>Week 12: Regular Expressions and Lexical Analysis.</li>
+                <li>Week 13: Formal Grammars and Syntax Structure.</li>
+                <li>Week 14: Parser Generators and Automated Tool Support.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>Topic 4: Software Quality, Measurement and Design Principles</h3>
+              <p>This matches the quality/testing/metrics side of the guide. In the current paper, the strongest direct evidence is reliability, testing, verification and validation, and limits of single metrics.</p>
+              <ul>
+                <li>Week 15: Software Metrics, GQM, and Scale Types.</li>
+                <li>Week 16: Software Quality and High-Integrity Systems.</li>
+                <li>Week 17: SOLID Principles.</li>
+                <li>Week 18: CI/CD pipeline.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout">
+            <strong>Important revision point:</strong> the module is clearly organised into four main blocks. The mock paper then shows which parts of those blocks are currently most directly examinable from the materials in this folder.
+          </div>
+        </section>
+
+        <section class="section-card" id="exam-format">
+          <h2>Exam Format / Strategy</h2>
+          <p class="section-intro">The available mock paper gives a good picture of the expected answer style. Even one paper tells us a lot when it is paired with a marking scheme.</p>
+          <div class="grid-two">
+            <div class="mini-card">
+              <h3>Likely paper style from the available materials</h3>
+              <ul>
+                <li>There are five questions and you choose three.</li>
+                <li>Each question is worth 25 marks.</li>
+                <li>The exam lasts 2 hours, so a safe target is about 40 minutes per chosen question.</li>
+                <li>The paper mixes short definitions, explanation, applied modelling, and scenario-based discussion.</li>
+                <li>The mark scheme rewards clear structure: definition, example, application, and completeness.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>Best beginner strategy</h3>
+              <ul>
+                <li>Build three strong question families first so you always have safe choices.</li>
+                <li>Prioritise the formal-modelling topics because they cover most of the available paper.</li>
+                <li>Practise writing short, clear answers before attempting full timed questions.</li>
+                <li>In the exam, choose questions where you can define the terms and give examples quickly.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Command word</th>
+                  <th>What the examiner wants</th>
+                  <th>How to structure the answer</th>
+                  <th>Common way marks are lost</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Explain</strong></td>
+                  <td>Meaning plus how or why it works.</td>
+                  <td>Definition → mechanism → small example or scenario → result.</td>
+                  <td>Giving a loose description with no cause-and-effect chain.</td>
+                </tr>
+                <tr>
+                  <td><strong>Compare</strong></td>
+                  <td>Direct similarities and differences using the same criteria.</td>
+                  <td>Feature 1 for both items → Feature 2 for both items → short conclusion.</td>
+                  <td>Writing about each item separately and never comparing them directly.</td>
+                </tr>
+                <tr>
+                  <td><strong>Discuss</strong></td>
+                  <td>Several relevant points, often with balance or trade-offs.</td>
+                  <td>Point → explanation → implication → next point → mini judgement.</td>
+                  <td>Listing facts with no balance or no conclusion.</td>
+                </tr>
+                <tr>
+                  <td><strong>Evaluate</strong></td>
+                  <td>A judgement based on strengths and weaknesses.</td>
+                  <td>Criteria → benefit → limitation → overall judgement.</td>
+                  <td>Describing the topic but never actually judging it.</td>
+                </tr>
+                <tr>
+                  <td><strong>Justify</strong></td>
+                  <td>A defended choice, not just the choice itself.</td>
+                  <td>State decision → reason 1 → reason 2 → note trade-off.</td>
+                  <td>Making a claim with no supporting reason.</td>
+                </tr>
+                <tr>
+                  <td><strong>Design</strong></td>
+                  <td>A complete, labelled solution or model.</td>
+                  <td>Show the parts → label them clearly → explain why they fit the rules.</td>
+                  <td>Producing a vague sketch with missing states, classes, or links.</td>
+                </tr>
+                <tr>
+                  <td><strong>Model</strong></td>
+                  <td>A structured representation of the system or behaviour.</td>
+                  <td>Identify system elements → show relationships or behaviour → keep notation clear.</td>
+                  <td>Drawing something intuitive but not tied to proper modelling notation.</td>
+                </tr>
+                <tr>
+                  <td><strong>Draw</strong></td>
+                  <td>A technically correct and readable diagram.</td>
+                  <td>Label everything that carries marks and make the diagram complete.</td>
+                  <td>Unlabelled lines, missing multiplicities, or incomplete transitions.</td>
+                </tr>
+                <tr>
+                  <td><strong>Analyse</strong></td>
+                  <td>Break the problem into parts and interpret what they imply.</td>
+                  <td>Observation → reason → consequence.</td>
+                  <td>Summarising without examining or interpreting.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="badge-list">
+            <span class="badge">Most common in the available paper: explain</span>
+            <span class="badge">Also common: describe, discuss</span>
+            <span class="badge">Diagram tasks matter</span>
+            <span class="badge">Short definitions are easy marks</span>
+          </div>
+        </section>
+
+        <section class="section-card" id="priority-map">
+          <h2>Topic Priority Map</h2>
+          <p class="section-intro">The available materials do not include several years of papers, so this ranking is based on what is most heavily represented in the current mock paper and mark scheme, while also respecting the official module topic structure.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Priority rank</th>
+                  <th>Grouped topic family</th>
+                  <th>Why it is high value</th>
+                  <th>Coverage in available paper</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1</strong></td>
+                  <td>Languages &amp; Reasoning plus Formal Specification</td>
+                  <td>Together these cover the biggest share of direct mock-paper marks and contain the most formal notation.</td>
+                  <td>UML, OCL, FSMs, automata, regular expressions, lexical analysis, grammars, parsing, symbol tables.</td>
+                </tr>
+                <tr>
+                  <td><strong>2</strong></td>
+                  <td>Concurrency</td>
+                  <td>A full 25-mark question with a very predictable structure, and this topic clearly extends into semaphores, scheduling, deadlock, and thread pools.</td>
+                  <td>Concurrency vs parallelism, threads, coordination, semaphores, scheduling, deadlock, thread pools.</td>
+                </tr>
+                <tr>
+                  <td><strong>3</strong></td>
+                  <td>Software Quality, Measurement and Design Principles</td>
+                  <td>The mock paper directly supports quality, metrics, and high-integrity ideas, while the wider module block also includes SOLID and CI/CD as useful supporting topics.</td>
+                  <td>Reliability, testing, verification and validation, metrics, GQM, scale types, high-integrity systems, SOLID, CI/CD.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid-two">
+            <div class="mini-card">
+              <h3>Most frequent topics in the available materials</h3>
+              <ul>
+                <li>UML class diagrams and OCL constraints.</li>
+                <li>Finite-state modelling and language recognition.</li>
+                <li>Context-free grammars, parse trees, regular expressions, and lexical analysis.</li>
+                <li>Concurrency, synchronization, deadlock, and thread pools.</li>
+                <li>Reliability, testing, metrics, and high-integrity quality ideas.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>Where to focus first if time is short</h3>
+              <ol>
+                <li>Learn the glossary and the formal-modelling language.</li>
+                <li>Get confident with UML/OCL and FSMs.</li>
+                <li>Practise grammars, regular expressions, lexical analysis, and compiler basics.</li>
+                <li>Add concurrency, deadlock, and thread pools as your safer applied questions.</li>
+                <li>Finish with metrics, high-integrity systems, SOLID, and CI/CD as Topic 4 revision.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card" id="study-order">
+          <h2>3-Week Study Order</h2>
+          <p class="section-intro">This is a practical beginner-first route based on the materials in the folder and the official module topic structure. It is ordered so that later topics feel less confusing.</p>
+
+          <div class="grid-three">
+            <div class="mini-card">
+              <h3>Week 1: Build the language</h3>
+              <ol class="steps">
+                <li><strong>Start with the glossary.</strong> You need the vocabulary before the formal topics feel manageable.</li>
+                <li><strong>Do UML Class Diagrams.</strong> This is visual and helps you get used to modelling language.</li>
+                <li><strong>Move to OCL.</strong> Learn invariant, precondition, and postcondition while the modelling scenario is still fresh.</li>
+                <li><strong>Finish with FSM basics.</strong> Think of states as memory, not just circles on a page.</li>
+              </ol>
+            </div>
+            <div class="mini-card">
+              <h3>Week 2: Extend into formal reasoning</h3>
+              <ol class="steps">
+                <li><strong>Study grammars and parsing.</strong> These connect well to FSM thinking because both are about formal structure.</li>
+                <li><strong>Learn regular expressions, lexical analysis, and symbol tables.</strong> These are shorter, definition-heavy marks.</li>
+                <li><strong>Add parser generators and tool support.</strong> Treat this as the “why these grammar tools matter in practice” part.</li>
+                <li><strong>Do one mixed formal-language revision session.</strong> Move between UML/OCL, FSMs, regular expressions, and CFGs in one sitting.</li>
+              </ol>
+            </div>
+            <div class="mini-card">
+              <h3>Week 3: Convert knowledge into marks</h3>
+              <ol class="steps">
+                <li><strong>Practise concurrency.</strong> Add deadlock, semaphores, scheduling, and thread pools to the core thread material.</li>
+                <li><strong>Practise quality and testing.</strong> Learn to attach every answer to the traffic-light scenario.</li>
+                <li><strong>Add Topic 4 areas.</strong> Revise metrics, GQM, scale types, SOLID, and CI/CD.</li>
+                <li><strong>Do timed question selections.</strong> Try three-question combinations under time pressure.</li>
+                <li><strong>Use Rapid Review.</strong> End with recall, not passive rereading.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="callout">
+            <strong>If you only have a few days left:</strong> prioritise glossary → UML/OCL → FSMs and grammars → concurrency and deadlock → quality/testing/metrics → rapid review. Then add SOLID and CI/CD if time remains.
+          </div>
+        </section>
+
+        <section class="section-card" id="glossary">
+          <h2>Starter Glossary</h2>
+          <p class="section-intro">Read this before the topic sections. It gives you the key words in plain English so the later material feels less overwhelming.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Term</th>
+                  <th>Plain-English meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>UML</td><td>A standard visual language used to model software systems.</td></tr>
+                <tr><td>Formal specification</td><td>A precise way of describing what a system must do and what rules it must obey.</td></tr>
+                <tr><td>Class diagram</td><td>A UML diagram showing classes, their data, and the relationships between them.</td></tr>
+                <tr><td>Multiplicity</td><td>The allowed number of objects in a relationship, such as 0..4 or 1..30.</td></tr>
+                <tr><td>OCL</td><td>A precise text language used with UML to write rules about a model.</td></tr>
+                <tr><td>Invariant</td><td>A rule that must always stay true.</td></tr>
+                <tr><td>Precondition</td><td>A rule that must be true before an operation starts.</td></tr>
+                <tr><td>Postcondition</td><td>A rule that must be true after an operation finishes.</td></tr>
+                <tr><td>Thread</td><td>One path of execution inside a program.</td></tr>
+                <tr><td>Parallelism</td><td>Performing multiple operations at the same time, usually on different processing resources.</td></tr>
+                <tr><td>Synchronization</td><td>Control of access to shared data so multiple threads do not corrupt it.</td></tr>
+                <tr><td>Semaphore</td><td>A synchronization mechanism used to control access to a limited resource or coordinate threads.</td></tr>
+                <tr><td>Deadlock</td><td>A situation where threads or processes wait on each other and none of them can continue.</td></tr>
+                <tr><td>Scheduling</td><td>The way work or threads are selected and ordered for execution.</td></tr>
+                <tr><td>Race condition</td><td>A bug where the result depends on the unpredictable timing of threads.</td></tr>
+                <tr><td>FSM</td><td>A machine with a fixed number of states used to process input symbol by symbol.</td></tr>
+                <tr><td>DFA</td><td>A finite-state machine with exactly one next move for each symbol in each state.</td></tr>
+                <tr><td>NFA</td><td>A finite-state machine that may have multiple possible moves or epsilon moves.</td></tr>
+                <tr><td>CFG</td><td>A context-free grammar: a set of rules describing how valid strings are formed.</td></tr>
+                <tr><td>Regular expression</td><td>A pattern notation used to describe sets of strings, often for token matching.</td></tr>
+                <tr><td>Token</td><td>A labelled unit of source code such as an identifier, keyword, or operator.</td></tr>
+                <tr><td>Symbol table</td><td>A compiler data structure that stores information about names in the program.</td></tr>
+                <tr><td>Parser generator</td><td>A tool that creates a parser automatically from a grammar specification.</td></tr>
+                <tr><td>Metric</td><td>A measurable value used to assess some property of software.</td></tr>
+                <tr><td>GQM</td><td>Goal-Question-Metric: a way to choose metrics by starting from the goal and the questions you need answered.</td></tr>
+                <tr><td>Scale type</td><td>The kind of measurement scale used for data, such as nominal, ordinal, interval, or ratio.</td></tr>
+                <tr><td>Reliability</td><td>How consistently software works correctly over time.</td></tr>
+                <tr><td>Fault tolerance</td><td>The ability to keep operating safely even when faults happen.</td></tr>
+                <tr><td>High-integrity system</td><td>A system where failure could have serious consequences, so correctness and safety matter greatly.</td></tr>
+                <tr><td>Design principle</td><td>A general rule or guideline for producing better software structure.</td></tr>
+                <tr><td>SOLID</td><td>A set of five object-oriented design principles aimed at making software easier to understand, extend, and maintain.</td></tr>
+                <tr><td>CI/CD</td><td>Continuous Integration and Continuous Delivery or Deployment: an automated pipeline for building, testing, and releasing software.</td></tr>
+                <tr><td>Functional testing</td><td>Testing what the system does against the requirements.</td></tr>
+                <tr><td>Non-functional testing</td><td>Testing qualities such as speed, reliability, or response time.</td></tr>
+                <tr><td>Verification</td><td>Checking that the system has been built correctly.</td></tr>
+                <tr><td>Validation</td><td>Checking that the right system has been built for the real need.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section-card" id="core-topics">
+          <h2>Core Topic Sections</h2>
+          <p class="section-intro">Each topic below follows the same pattern so your revision stays active and predictable: understand the idea, learn the key points, spot mistakes, test yourself, then practise the exam-answer shape.</p>
+        </section>
+
+        <section class="section-card topic-section" id="topic-uml">
+          <div class="topic-header">
+            <div>
+              <h2>UML Class Diagrams</h2>
+              <p class="section-intro">This is one of the easiest places to pick up marks if you remember the basic building blocks and label everything clearly.</p>
+            </div>
+            <span class="tag">High priority</span>
+          </div>
+          <div class="topic-blocks">
+            <div class="topic-block">
+              <h3>What this topic is</h3>
+              <p>A UML class diagram is a static picture of a system. It shows the main classes, the data they hold, and the relationships between them.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Why it matters</h3>
+              <p>The available mock paper gives a dedicated diagram task on class modelling, and the mark scheme rewards correct classes, attributes, relationships, multiplicities, and clarity.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Simple explanation from scratch</h3>
+              <p>Start by reading the scenario and spotting the important nouns. These often become classes. Then ask what information each class needs to store. Finally, connect the classes and show how many of each can be linked. Those numbers are the multiplicities.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Key ideas I must know</h3>
+              <ul>
+                <li>Class, attribute, association, multiplicity.</li>
+                <li>Why a relationship sometimes needs its own class, such as <em>Enrolment</em>.</li>
+                <li>How to turn scenario rules into multiplicities.</li>
+                <li>Why a neat diagram is better than a messy but longer one.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>Example</h3>
+              <p>A simple course-registration model could be written like this if you are describing the diagram in text:</p>
+              <pre><code>Student
+- studentId: String
+- name: String
+- outstandingFees: Decimal
+
+Course
+- courseCode: String
+- title: String
+
+Enrolment
+- enrolDate: Date
+- status: String
+
+Student "1" -- "0..4" Enrolment
+Course  "1" -- "0..30" Enrolment</code></pre>
+            </div>
+            <div class="topic-block">
+              <h3>Common mistakes</h3>
+              <ul>
+                <li>Forgetting multiplicities even when the scenario gives number limits.</li>
+                <li>Listing classes but forgetting attributes.</li>
+                <li>Drawing links with no labels or no readable structure.</li>
+                <li>Using a direct line between two classes when the relationship itself needs data.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>How it appears in past exams</h3>
+              <p>The mock paper asks for a UML class diagram and the mark scheme splits the marks into separate visible pieces: classes, attributes, associations, multiplicities, and overall clarity.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Short memory tricks</h3>
+              <ul>
+                <li><strong>CARM</strong>: Classes, Attributes, Relationships, Multiplicities.</li>
+                <li>Nouns often become classes.</li>
+                <li>Numbers in the scenario usually become multiplicities.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quiz-box">
+            <h3>5 quick quiz questions</h3>
+            <ol>
+              <li>What does multiplicity show in a class diagram?</li>
+              <li>Why might Enrolment be a separate class instead of only a line?</li>
+              <li>Give one attribute for Student and one for Course.</li>
+              <li>What part of the diagram should show the rule “at most 30 students”?</li>
+              <li>Why can neatness and clarity still win marks?</li>
+            </ol>
+            <details>
+              <summary>Show short answers</summary>
+              <ol>
+                <li>It shows how many objects can take part in a relationship.</li>
+                <li>Because the relationship may need its own data, such as enrolDate or status.</li>
+                <li>Student might have <em>studentId</em>; Course might have <em>courseCode</em>.</li>
+                <li>The multiplicity on the relationship.</li>
+                <li>Because the marker needs to read the classes, links, and multiplicities quickly and unambiguously.</li>
+              </ol>
+            </details>
+          </div>
+          <div class="exam-pattern">
+            <h3>Short exam answer guidance</h3>
+            <p>For a 6-mark class-diagram task, aim to show the classes first, add one or two sensible attributes per class, draw the associations, and then add the multiplicities from the scenario. If you are running short on time, do not leave the multiplicities out because they are easy marks.</p>
+          </div>
+          <div class="focus-grid">
+            <div class="focus-card">
+              <h3>What the examiner is really looking for</h3>
+              <ul>
+                <li>Relevant classes, not random extras.</li>
+                <li>Attributes that make sense for the scenario.</li>
+                <li>Relationships that are readable and logically correct.</li>
+                <li>Multiplicity that captures the business rules.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>Fast answer frame</h3>
+              <ol>
+                <li>Name the main classes.</li>
+                <li>Add one or two useful attributes per class.</li>
+                <li>Draw the links between them.</li>
+                <li>Finish with multiplicities and a one-line explanation.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card topic-section" id="topic-ocl">
+          <div class="topic-header">
+            <div>
+              <h2>Object Constraint Language (OCL)</h2>
+              <p class="section-intro">OCL looks intimidating at first, but the exam version is usually just about turning plain-English rules into precise statements.</p>
+            </div>
+            <span class="tag">Very high priority</span>
+          </div>
+          <div class="topic-blocks">
+            <div class="topic-block">
+              <h3>What this topic is</h3>
+              <p>OCL is a text language used with UML models to write exact rules. It is not general programming code. It is a way of stating what must be true.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Why it matters</h3>
+              <p>The available paper uses OCL for invariants, preconditions, postconditions, and explanation questions. This makes it one of the highest-value technical topics in the folder.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Simple explanation from scratch</h3>
+              <p>Natural language can be vague. If you write “a student should not take too many courses”, people may disagree about what “too many” means. OCL removes that ambiguity. An invariant says what must always be true. A precondition says what must be true before an operation runs. A postcondition says what must be true after it finishes.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Key ideas I must know</h3>
+              <ul>
+                <li><strong>Context</strong>: the class or operation the rule belongs to.</li>
+                <li><strong>Invariant</strong>: always true.</li>
+                <li><strong>Precondition</strong>: true before the operation.</li>
+                <li><strong>Postcondition</strong>: true after the operation.</li>
+                <li><strong>@pre</strong>: the old value before the operation.</li>
+                <li>Structural constraints describe valid states; behavioural constraints describe behaviour of operations.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>Example</h3>
+              <pre><code>context Student
+inv MaxFourCourses:
+    self.courses-&gt;size() &lt;= 4
+
+context Course
+inv MaxThirtyStudents:
+    self.students-&gt;size() &lt;= 30
+
+context RegistrationSystem::enrolCourse(student: Student, course: Course)
+pre StudentBelowLimit:
+    student.courses-&gt;size() &lt; 4
+pre CourseHasSpace:
+    course.students-&gt;size() &lt; 30
+pre FeesCleared:
+    student.outstandingFees = 0
+post StudentUpdated:
+    student.courses = student.courses@pre-&gt;including(course)</code></pre>
+            </div>
+            <div class="topic-block">
+              <h3>Common mistakes</h3>
+              <ul>
+                <li>Writing vague English instead of OCL-like structure.</li>
+                <li>Forgetting to attach rules to a context.</li>
+                <li>Using <code>&lt;= 4</code> as a precondition when adding another course, which can allow a fifth course.</li>
+                <li>Giving preconditions but no postconditions.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>How it appears in past exams</h3>
+              <p>The mock paper asks for three invariants, preconditions and postconditions for an enrolment operation, the difference between structural and behavioural constraints, and the advantages of OCL over natural language.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Short memory tricks</h3>
+              <ul>
+                <li>Invariant = always.</li>
+                <li>Pre = before, Post = after.</li>
+                <li>OCL is “precise rules for UML”.</li>
+                <li>If the operation adds something, the precondition is often stricter than the invariant.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quiz-box">
+            <h3>5 quick quiz questions</h3>
+            <ol>
+              <li>What is the main purpose of OCL?</li>
+              <li>What is the difference between an invariant and a precondition?</li>
+              <li>What does <code>@pre</code> mean?</li>
+              <li>Is “a student has at most four courses” structural or behavioural?</li>
+              <li>Give one advantage of OCL over natural language.</li>
+            </ol>
+            <details>
+              <summary>Show short answers</summary>
+              <ol>
+                <li>To write precise, unambiguous rules for a model.</li>
+                <li>An invariant must always hold; a precondition must hold before an operation runs.</li>
+                <li>It means the old value from before the operation executed.</li>
+                <li>Structural, because it describes a valid state of the model.</li>
+                <li>It is more precise and can be checked consistently.</li>
+              </ol>
+            </details>
+          </div>
+          <div class="exam-pattern">
+            <h3>Short exam answer guidance</h3>
+            <p>When the question gives business rules, write one clear rule per business rule. If asked for advantages of OCL, the safest pair is <strong>precision</strong> and <strong>support for checking or formal analysis</strong>. If asked for structural versus behavioural, define each first and then give a tiny scenario-based example.</p>
+          </div>
+          <div class="focus-grid">
+            <div class="focus-card">
+              <h3>What the examiner is really looking for</h3>
+              <ul>
+                <li>A separate rule for each business rule.</li>
+                <li>The difference between invariant, precondition, and postcondition.</li>
+                <li>Believable OCL syntax rather than loose prose.</li>
+                <li>Examples linked back to the enrolment scenario.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>Fast answer frame</h3>
+              <ol>
+                <li>State the context.</li>
+                <li>Write the invariant or pre/post rule clearly.</li>
+                <li>Repeat for the next rule instead of mixing them together.</li>
+                <li>End explanation questions with “this is useful because…”</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card topic-section" id="topic-concurrency">
+          <div class="topic-header">
+            <div>
+              <h2>Concurrency and Multithreading</h2>
+              <p class="section-intro">This topic is less about code syntax and more about understanding what goes wrong when many tasks access the same data at the same time.</p>
+            </div>
+            <span class="tag">High priority</span>
+          </div>
+          <div class="topic-blocks">
+            <div class="topic-block">
+              <h3>What this topic is</h3>
+              <p>Concurrency is when a system handles multiple tasks during the same period. Multithreading is one way to do that inside a program, using several threads of execution.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Why it matters</h3>
+              <p>The mock paper includes a full 25-mark question on shared resources, synchronization, race conditions, thread pools, and performance problems caused by too many threads. This matters even more because the same topic naturally extends into parallelism, coordination, semaphores, scheduling, and deadlock.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Simple explanation from scratch</h3>
+              <p>Imagine several people trying to write to the same whiteboard at once. Without turn-taking, some information gets lost or overwritten. Shared program data works the same way. Synchronization is the turn-taking rule that keeps the data correct.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Key ideas I must know</h3>
+              <ul>
+                <li>Concurrency versus parallelism.</li>
+                <li>Shared resource, critical section, synchronization.</li>
+                <li>Race condition and why it creates unpredictable results.</li>
+                <li>Mutex locks, semaphores, coordination, and monitors.</li>
+                <li>Thread priorities and scheduling at a basic exam-explanation level.</li>
+                <li>Deadlock and why waiting cycles are dangerous.</li>
+                <li>How a thread pool works.</li>
+                <li>Why too many threads can harm performance.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>Example</h3>
+              <p>In the mock paper, several threads handle food-delivery orders. If two threads both think the same driver is free, they might assign that driver twice. A mutex around the driver-assignment step stops that by allowing only one thread to update the shared data at a time.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Common mistakes</h3>
+              <ul>
+                <li>Confusing concurrency with parallelism.</li>
+                <li>Defining a race condition too vaguely and never giving a concrete effect.</li>
+                <li>Naming a mutex or semaphore without explaining how it protects the data.</li>
+                <li>Forgetting that deadlock is about threads waiting on each other in a cycle.</li>
+                <li>Assuming more threads always means faster performance.</li>
+                <li>Ignoring the scenario and answering only in generic theory.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>How it appears in past exams</h3>
+              <p>The current mock-paper question structure is very predictable: explain why synchronization is needed, define a race condition, discuss two synchronization mechanisms, explain thread pools, and explain why excessive threading can be harmful. It is worth revising semaphores, scheduling, priorities, coordination, and deadlock alongside this because they belong to the same concurrency block and help you answer broader theory questions.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Short memory tricks</h3>
+              <ul>
+                <li>Concurrency = many tasks in progress; parallelism = tasks literally at the same time.</li>
+                <li>Race condition = same data, same time, unpredictable result.</li>
+                <li>Mutex = one at a time.</li>
+                <li>Semaphore = counted permission.</li>
+                <li>Deadlock = everyone waits, nobody moves.</li>
+                <li>Thread pool = reuse workers, do not keep recreating them.</li>
+                <li>Too many threads = more switching, more memory, more waiting.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quiz-box">
+            <h3>5 quick quiz questions</h3>
+            <ol>
+              <li>Why do shared resources need synchronization?</li>
+              <li>What is a race condition?</li>
+              <li>What does a mutex lock do?</li>
+              <li>Why can a thread pool help a busy system?</li>
+              <li>Give one reason too many threads can reduce performance.</li>
+            </ol>
+            <details>
+              <summary>Show short answers</summary>
+              <ol>
+                <li>Because uncontrolled simultaneous access can cause inconsistent or corrupted data.</li>
+                <li>A bug where the result depends on the unpredictable timing of threads.</li>
+                <li>It allows only one thread at a time into a critical section.</li>
+                <li>Because worker threads are reused, reducing creation overhead and limiting thread growth.</li>
+                <li>Context-switching overhead, memory usage, or stronger contention for shared resources.</li>
+              </ol>
+            </details>
+          </div>
+          <div class="exam-pattern">
+            <h3>Short exam answer guidance</h3>
+            <p>For concurrency answers, use this order: <strong>define the term → apply it to the scenario → state the risk → explain the mechanism that solves it</strong>. That order matches how the mark scheme awards marks.</p>
+          </div>
+          <div class="focus-grid">
+            <div class="focus-card">
+              <h3>Module week breakdown</h3>
+              <ul>
+                <li>Week 6: concurrency and parallelism.</li>
+                <li>Week 7: managing threads, priorities, and coordination.</li>
+                <li>Week 8: advanced synchronization, semaphores, and scheduling.</li>
+                <li>Week 9: deadlock.</li>
+                <li>Week 10: thread pools.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>What the examiner is really looking for</h3>
+              <ul>
+                <li>A clear definition first.</li>
+                <li>A concrete example from the delivery-platform scenario.</li>
+                <li>A named mechanism and how it improves consistency.</li>
+                <li>A real performance reason, not “it gets slower somehow”.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>Fast answer frame</h3>
+              <ol>
+                <li>Define the problem: shared resource or race condition.</li>
+                <li>Describe the bad outcome in the scenario.</li>
+                <li>Name the mechanism.</li>
+                <li>Explain exactly how it prevents the problem.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card topic-section" id="topic-fsm">
+          <div class="topic-header">
+            <div>
+              <h2>Finite State Machines (FSMs, DFAs, and NFAs)</h2>
+              <p class="section-intro">This topic becomes much easier when you stop thinking of states as complicated diagrams and start thinking of them as tiny pieces of memory.</p>
+            </div>
+            <span class="tag">Very high priority</span>
+          </div>
+          <div class="topic-blocks">
+            <div class="topic-block">
+              <h3>What this topic is</h3>
+              <p>An FSM is a mathematical model that reads input one symbol at a time and moves between states. The state stores the small amount of memory the machine needs.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Why it matters</h3>
+              <p>The available paper gives a full 25-mark question on FSM definitions, DFA versus NFA, designing a DFSM, explaining a language, and describing what information the machine must remember. This matters because FSMs sit at the heart of the formal-languages part of the module, so getting comfortable here makes later topics feel easier too.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Simple explanation from scratch</h3>
+              <p>An FSM cannot remember an entire input string. It can only remember the information stored in its current state. That means the key exam skill is asking: what is the minimum information the machine needs in order to make the next decision correctly?</p>
+            </div>
+            <div class="topic-block">
+              <h3>Key ideas I must know</h3>
+              <ul>
+                <li>States, alphabet, transition function, start state, accepting states.</li>
+                <li>DFA: exactly one transition per symbol from each state.</li>
+                <li>NFA: zero, one, or many transitions, and possibly epsilon transitions.</li>
+                <li>Dead state and why it keeps the machine complete.</li>
+                <li>How to identify the information the machine must remember.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>Example</h3>
+              <pre><code>States:
+q0    = start, accepting
+qA    = last symbol was a, accepting
+qB    = last symbol was b, accepting
+qDead = invalid repeated symbol, rejecting
+
+Transitions:
+q0:    a -&gt; qA,    b -&gt; qB
+qA:    a -&gt; qDead, b -&gt; qB
+qB:    a -&gt; qA,    b -&gt; qDead
+qDead: a -&gt; qDead, b -&gt; qDead</code></pre>
+            </div>
+            <div class="topic-block">
+              <h3>Common mistakes</h3>
+              <ul>
+                <li>Forgetting to show the start state or the accepting states.</li>
+                <li>Leaving out a transition, so the machine is incomplete.</li>
+                <li>Using more states than needed because the key memory idea is unclear.</li>
+                <li>Mixing up DFA and NFA definitions.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>How it appears in past exams</h3>
+              <p>The mock paper asks for definition, comparison, design, explanation of the language, examples in and out of the language, and a short reasoning answer about what the machine must remember.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Short memory tricks</h3>
+              <ul>
+                <li>State = memory slot.</li>
+                <li>D in DFA = one definite move.</li>
+                <li>For adjacency rules, ask what the last symbol was.</li>
+                <li>If the rule is broken, a dead state often helps.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quiz-box">
+            <h3>5 quick quiz questions</h3>
+            <ol>
+              <li>Name the main elements of an FSM.</li>
+              <li>What is the key difference between a DFA and an NFA?</li>
+              <li>Why is a dead state useful?</li>
+              <li>Give one string that belongs to the “no identical adjacent symbols” language and one that does not.</li>
+              <li>What does the machine need to remember for that language?</li>
+            </ol>
+            <details>
+              <summary>Show short answers</summary>
+              <ol>
+                <li>States, alphabet, transition function, start state, and accepting states.</li>
+                <li>A DFA has exactly one move per symbol from each state; an NFA can have multiple possible moves or epsilon moves.</li>
+                <li>It captures the invalid situation and keeps the machine complete.</li>
+                <li><em>ab</em> belongs; <em>aa</em> does not.</li>
+                <li>Only the last symbol read.</li>
+              </ol>
+            </details>
+          </div>
+          <div class="exam-pattern">
+            <h3>Short exam answer guidance</h3>
+            <p>If asked to design a machine, write the states in words first before drawing anything. That often prevents mistakes. Then add the start state, accepting states, and every transition. Finish with one sentence explaining the memory idea behind the design.</p>
+          </div>
+          <div class="focus-grid">
+            <div class="focus-card">
+              <h3>Where this fits in the module</h3>
+              <ul>
+                <li>Week 11: Finite State Machines and Automata Theory.</li>
+                <li>This is one of the clearest direct matches between the formal-languages syllabus and the current mock paper.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>What the examiner is really looking for</h3>
+              <ul>
+                <li>The five core FSM elements named correctly.</li>
+                <li>A complete set of states and transitions.</li>
+                <li>Correct examples in and out of the language.</li>
+                <li>A short explanation of the minimum memory required.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>Fast answer frame</h3>
+              <ol>
+                <li>Say what the machine must remember.</li>
+                <li>Turn that memory into named states.</li>
+                <li>Mark the start and accepting states.</li>
+                <li>Add every transition and explain one example run.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card topic-section" id="topic-cfg">
+          <div class="topic-header">
+            <div>
+              <h2>Context-Free Grammars and Parsing</h2>
+              <p class="section-intro">This topic is about how valid strings are built and how their structure is shown. It is more mechanical than it first looks.</p>
+            </div>
+            <span class="tag">Very high priority</span>
+          </div>
+          <div class="topic-blocks">
+            <div class="topic-block">
+              <h3>What this topic is</h3>
+              <p>A context-free grammar is a set of production rules used to describe how strings in a language can be formed. Parsing is the process of using those rules to show structure.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Why it matters</h3>
+              <p>The mock paper includes leftmost derivation, parse trees, operator precedence, and bottom-up parsing. This matters because grammar and syntax structure are a central part of the module's reasoning block, and they connect directly to lexical analysis and parser tools.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Simple explanation from scratch</h3>
+              <p>Think of a grammar as a recipe. Non-terminals are unfinished parts that can still be expanded. Terminals are the final symbols that appear in the completed string. A derivation shows the recipe steps. A parse tree shows the same structure in picture form.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Key ideas I must know</h3>
+              <ul>
+                <li>Terminal versus non-terminal.</li>
+                <li>Production rules and derivations.</li>
+                <li>Leftmost derivation.</li>
+                <li>Parse tree structure.</li>
+                <li>How grammar levels can enforce operator precedence.</li>
+                <li>Bottom-up parsing as reduction back to the start symbol.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>Example</h3>
+              <pre><code>E -&gt; E + T | T
+T -&gt; T * F | F
+F -&gt; (E) | id
+
+Leftmost derivation of id + id * id:
+E
+=&gt; E + T
+=&gt; T + T
+=&gt; F + T
+=&gt; id + T
+=&gt; id + T * F
+=&gt; id + F * F
+=&gt; id + id * F
+=&gt; id + id * id</code></pre>
+            </div>
+            <div class="topic-block">
+              <h3>Common mistakes</h3>
+              <ul>
+                <li>Forgetting that the question specifically asked for a leftmost derivation.</li>
+                <li>Skipping derivation steps.</li>
+                <li>Explaining precedence vaguely without referring to the grammar levels.</li>
+                <li>Giving an incorrect parse tree shape for the string.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>How it appears in past exams</h3>
+              <p>The paper asks for a leftmost derivation, a short precedence explanation, all strings of a given length from a CFG, a parse tree, and the meaning of a bottom-up parser.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Short memory tricks</h3>
+              <ul>
+                <li>Grammar generates; parser checks structure.</li>
+                <li>Leftmost means always expand the leftmost unfinished symbol.</li>
+                <li>T beats E for multiplication precedence in the given grammar.</li>
+                <li>Bottom-up means reduce back to the start symbol.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quiz-box">
+            <h3>5 quick quiz questions</h3>
+            <ol>
+              <li>What is the difference between a terminal and a non-terminal?</li>
+              <li>What does “leftmost derivation” mean?</li>
+              <li>Why does the expression grammar give multiplication higher precedence than addition?</li>
+              <li>What is the only length-4 string generated by <code>S -&gt; 0S1 | 01</code>?</li>
+              <li>What does a bottom-up parser do?</li>
+            </ol>
+            <details>
+              <summary>Show short answers</summary>
+              <ol>
+                <li>A terminal appears in the final string; a non-terminal can still be expanded.</li>
+                <li>You always expand the leftmost non-terminal first.</li>
+                <li>Because multiplication is formed at the T level, inside the higher E level where addition is combined.</li>
+                <li><code>0011</code>.</li>
+                <li>It reduces the input step by step until it becomes the start symbol.</li>
+              </ol>
+            </details>
+          </div>
+          <div class="exam-pattern">
+            <h3>Short exam answer guidance</h3>
+            <p>Show your working. In grammar questions, marks are often tied to the visible steps. Even if you are unsure, partial derivation steps are better than jumping straight to the final string with no structure.</p>
+          </div>
+          <div class="focus-grid">
+            <div class="focus-card">
+              <h3>Where this fits in the module</h3>
+              <ul>
+                <li>Week 13: Formal Grammars and Syntax Structure.</li>
+                <li>The next step from this topic is parser generators and automated tool support.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>What the examiner is really looking for</h3>
+              <ul>
+                <li>The exact derivation type requested.</li>
+                <li>Correct use of grammar rules.</li>
+                <li>Precedence explained using E, T, and F levels.</li>
+                <li>A parse tree whose leaves really match the target string.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>Fast answer frame</h3>
+              <ol>
+                <li>Write the grammar rule you are using at each step.</li>
+                <li>Expand in the requested order, such as leftmost.</li>
+                <li>Check the final string carefully.</li>
+                <li>For precedence, explain which grammar level binds first.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card topic-section" id="topic-compiler">
+          <div class="topic-header">
+            <div>
+              <h2>Lexical Analysis, Tokenisation, and Symbol Tables</h2>
+              <p class="section-intro">These are good scoring subtopics because the questions are often short and definition-based, but only if you keep the stages clearly separated in your head.</p>
+            </div>
+            <span class="tag">High priority</span>
+          </div>
+          <div class="topic-blocks">
+            <div class="topic-block">
+              <h3>What this topic is</h3>
+              <p>Lexical analysis is the stage that scans source-code characters and turns them into tokens. Tokenisation is that grouping process, and the symbol table stores information about identifiers.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Why it matters</h3>
+              <p>The available paper asks directly about lexical-analysis tasks, tokenisation, symbol tables, regular-expression limits, and bottom-up parsing support material. This matters because it is one of the faster-scoring theory areas once the definitions are clear.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Simple explanation from scratch</h3>
+              <p>The compiler does not want to reason about individual characters forever. It first groups them into meaningful units such as identifiers, keywords, numbers, and operators. Those units are called tokens. Later stages then use those tokens to check grammar and meaning.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Key ideas I must know</h3>
+              <ul>
+                <li>What regular expressions are good for and where they stop being enough.</li>
+                <li>Lexeme versus token.</li>
+                <li>Main lexer tasks: scan, recognise, ignore whitespace/comments, pass tokens on.</li>
+                <li>What the symbol table stores: identifiers, types, scopes, and other attributes.</li>
+                <li>Why regular expressions cannot represent nested structures like balanced parentheses.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>Example</h3>
+              <pre><code>Source code:
+total = count + 1;
+
+Lexemes:
+total | = | count | + | 1 | ;
+
+Tokens:
+IDENTIFIER | ASSIGN | IDENTIFIER | PLUS | INT_LITERAL | SEMICOLON</code></pre>
+            </div>
+            <div class="topic-block">
+              <h3>Common mistakes</h3>
+              <ul>
+                <li>Mixing up token and lexeme.</li>
+                <li>Explaining parsing when the question asked only about lexical analysis.</li>
+                <li>Claiming regular expressions can validate balanced nested brackets.</li>
+                <li>Defining the symbol table but not saying why it matters.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>How it appears in past exams</h3>
+              <p>The mock paper asks what lexical analysis does, what a symbol table is, why it is important, what tokenisation is, and one limitation of regular expressions in programming-language processing.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Short memory tricks</h3>
+              <ul>
+                <li>Lexeme = actual text, token = category.</li>
+                <li>Lexer labels units; parser checks structure.</li>
+                <li>Regex is good for flat patterns, bad for nesting.</li>
+                <li>Symbol table = name memory for the compiler.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quiz-box">
+            <h3>5 quick quiz questions</h3>
+            <ol>
+              <li>What is the difference between a lexeme and a token?</li>
+              <li>Name two tasks of lexical analysis.</li>
+              <li>Why is a symbol table useful?</li>
+              <li>Why are regular expressions limited for balanced parentheses?</li>
+              <li>Which stage usually comes after lexical analysis?</li>
+            </ol>
+            <details>
+              <summary>Show short answers</summary>
+              <ol>
+                <li>A lexeme is the actual character sequence; a token is its category.</li>
+                <li>Scanning characters, identifying tokens, removing whitespace/comments, or passing tokens to the parser.</li>
+                <li>It stores identifier information for later stages such as type checking and scope resolution.</li>
+                <li>Because balanced parentheses require nested or recursive matching.</li>
+                <li>Parsing.</li>
+              </ol>
+            </details>
+          </div>
+          <div class="exam-pattern">
+            <h3>Short exam answer guidance</h3>
+            <p>For short compiler questions, lead with a clean definition. Then name the stage, its job, and one example. Short, precise answers often score better here than long vague ones.</p>
+          </div>
+          <div class="focus-grid">
+            <div class="focus-card">
+              <h3>Where this fits in the module</h3>
+              <ul>
+                <li>Week 12: Regular Expressions and Lexical Analysis.</li>
+                <li>This topic sits inside Topic 3: Languages and Reasoning.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>What the examiner is really looking for</h3>
+              <ul>
+                <li>The difference between lexeme, token, and parser stage.</li>
+                <li>Main lexical-analysis tasks named clearly.</li>
+                <li>A useful explanation of why the symbol table matters.</li>
+                <li>A correct limitation of regular expressions.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>Fast answer frame</h3>
+              <ol>
+                <li>Define the term asked for.</li>
+                <li>State its role in the compiler pipeline.</li>
+                <li>Give one tiny example.</li>
+                <li>Finish with why it matters.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card topic-section" id="topic-parser-tools">
+          <div class="topic-header">
+            <div>
+              <h2>Parser Generators and Automated Tool Support</h2>
+              <p class="section-intro">This is the “why do we use tools?” side of grammars and parsing. It connects the theory to practical language-processing workflows.</p>
+            </div>
+            <span class="tag">Syllabus topic</span>
+          </div>
+          <div class="topic-blocks">
+            <div class="topic-block">
+              <h3>What this topic is</h3>
+              <p>A parser generator is a tool that takes a grammar specification and automatically produces a parser. Automated tool support means using software tools to reduce manual parser writing and to check grammar-related problems more systematically.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Why it matters</h3>
+              <p>Even though this is not explicit in the current mock paper, it matters because it turns grammar theory into practical parser-building knowledge and can strengthen answers about syntax structure and language-processing tools.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Simple explanation from scratch</h3>
+              <p>Writing a parser by hand can be slow and error-prone. If you already have a grammar, a parser generator can build much of the parser logic for you. That means less repetitive work and more consistency, as long as the grammar is suitable for the chosen tool.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Key ideas I must know</h3>
+              <ul>
+                <li>What a parser generator does.</li>
+                <li>The relationship between grammar specification and generated parser.</li>
+                <li>Advantages such as speed, consistency, and easier maintenance.</li>
+                <li>Possible limitations, such as grammar restrictions or tool-specific formats.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>Example</h3>
+              <p>If a module gives you a grammar for arithmetic expressions, a parser generator could take that grammar and produce a parser that recognises valid expressions automatically, rather than requiring you to code every parsing step by hand.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Common mistakes</h3>
+              <ul>
+                <li>Describing a parser generator as if it writes the whole compiler for you.</li>
+                <li>Ignoring that the grammar still needs to be correct and suitable.</li>
+                <li>Talking only about tools and forgetting the underlying grammar idea.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>How it appears in past exams</h3>
+              <p>It is not explicit in the current mock paper, so revise it as a broader syllabus extension of grammars and parsing rather than as one of the strongest current mock-paper favourites.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Short memory tricks</h3>
+              <ul>
+                <li>Grammar first, tool second.</li>
+                <li>Parser generator = automate the parser-building step.</li>
+                <li>Good tool output still depends on a good grammar.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quiz-box">
+            <h3>5 quick quiz questions</h3>
+            <ol>
+              <li>What does a parser generator do?</li>
+              <li>Why might a developer use one instead of writing a parser manually?</li>
+              <li>What must still be correct even if a parser generator is used?</li>
+              <li>Does a parser generator replace the need to understand grammars?</li>
+              <li>Why is this topic still worth revising even though it is not explicit in the current mock paper?</li>
+            </ol>
+            <details>
+              <summary>Show short answers</summary>
+              <ol>
+                <li>It takes a grammar specification and produces a parser automatically.</li>
+                <li>Because it can save time and improve consistency.</li>
+                <li>The grammar specification.</li>
+                <li>No, you still need to understand grammars and syntax structure.</li>
+                <li>Because it strengthens the wider grammars-and-parsing part of the syllabus.</li>
+              </ol>
+            </details>
+          </div>
+          <div class="exam-pattern">
+            <h3>Short exam answer guidance</h3>
+            <p>If this appears as a theory question, define the tool first, explain how it uses a grammar, then give one advantage and one limitation.</p>
+          </div>
+        </section>
+
+        <section class="section-card topic-section" id="topic-quality">
+          <div class="topic-header">
+            <div>
+              <h2>Software Quality and High-Integrity Systems</h2>
+              <p class="section-intro">This topic is about keeping software safe and dependable, especially when failure could have serious real-world effects.</p>
+            </div>
+            <span class="tag">High priority</span>
+          </div>
+          <div class="topic-blocks">
+            <div class="topic-block">
+              <h3>What this topic is</h3>
+              <p>This area covers reliability risks, fault-tolerant design, functional and non-functional testing, verification and validation, unit testing, and limits of quality metrics.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Why it matters</h3>
+              <p>The available paper has a full 25-mark question on a smart traffic-light system. That means you need to explain both the theory and the safety implications in context. It matters because high-integrity systems are exactly the kind of software where good quality practice, testing, and verification make the biggest difference.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Simple explanation from scratch</h3>
+              <p>In a safety-related system, the software must not only work when everything is perfect. It must also behave safely when inputs are wrong, delayed, or missing. That is where fault tolerance, good testing, and strong verification become important.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Key ideas I must know</h3>
+              <ul>
+                <li>Reliability versus fault tolerance.</li>
+                <li>Functional testing versus non-functional testing.</li>
+                <li>Verification versus validation.</li>
+                <li>What makes a system “high integrity”.</li>
+                <li>Why simulation, formal checks, and reviews all matter.</li>
+                <li>Why a single metric cannot fully measure maintainability or reliability.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>Example</h3>
+              <p>In the traffic-light scenario, inaccurate sensor data could keep the light green for too long or change it too quickly. Two sensible fault-tolerance strategies are redundant sensors and a safe fallback timing mode if the sensor data cannot be trusted.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Common mistakes</h3>
+              <ul>
+                <li>Confusing functional and non-functional testing.</li>
+                <li>Naming verification techniques without explaining how they improve safety.</li>
+                <li>Talking about quality metrics as if one number tells the whole story.</li>
+                <li>Giving generic risk words without linking them to the scenario.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>How it appears in past exams</h3>
+              <p>The mock paper asks about reliability risks, fault tolerance strategies, functional versus non-functional testing, verification or validation techniques, limits of single metrics, and the purpose of unit testing in high-integrity software. This makes it one of the clearest direct exam routes into the software-quality side of the module.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Short memory tricks</h3>
+              <ul>
+                <li>Functional = what it does; non-functional = how well it does it.</li>
+                <li>Verification = built right; validation = right thing built.</li>
+                <li>Fault tolerance = redundancy plus fallback.</li>
+                <li>High integrity = failures matter a lot, so checking must be stronger.</li>
+                <li>One metric never tells the whole quality story.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quiz-box">
+            <h3>5 quick quiz questions</h3>
+            <ol>
+              <li>What is the difference between reliability and fault tolerance?</li>
+              <li>Give one functional test and one non-functional test for the traffic-light system.</li>
+              <li>Why might redundant sensors improve safety?</li>
+              <li>Name one verification or validation technique suitable for a safety-related system.</li>
+              <li>Why is one metric not enough to judge maintainability?</li>
+            </ol>
+            <details>
+              <summary>Show short answers</summary>
+              <ol>
+                <li>Reliability is about correct operation over time; fault tolerance is about continuing safely when faults occur.</li>
+                <li>Functional: test that high traffic extends green time. Non-functional: measure response time under heavy load.</li>
+                <li>Because one faulty reading can be checked against another source instead of being trusted blindly.</li>
+                <li>Simulation, formal verification, code review, or safety audit.</li>
+                <li>Because maintainability includes several aspects such as readability, modularity, and ease of change.</li>
+              </ol>
+            </details>
+          </div>
+          <div class="exam-pattern">
+            <h3>Short exam answer guidance</h3>
+            <p>For quality and testing answers, do not stop at naming the technique. Add one sentence on how it helps this specific system. That scenario link is where many easy marks sit.</p>
+          </div>
+          <div class="focus-grid">
+            <div class="focus-card">
+              <h3>Where this fits in the module</h3>
+              <ul>
+                <li>Week 16: Software Quality and High-Integrity Systems.</li>
+                <li>This is one of the most directly evidenced quality topics in the current mock paper.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>What the examiner is really looking for</h3>
+              <ul>
+                <li>A real system risk, not just a vague danger word.</li>
+                <li>Practical safety strategies such as redundancy or fallback logic.</li>
+                <li>A correct distinction between functional and non-functional testing.</li>
+                <li>A reasoned explanation of why one metric is not enough.</li>
+              </ul>
+            </div>
+            <div class="focus-card">
+              <h3>Fast answer frame</h3>
+              <ol>
+                <li>Name the risk or technique.</li>
+                <li>Explain it briefly.</li>
+                <li>Apply it to the traffic-light scenario.</li>
+                <li>State the safety or quality benefit.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card topic-section" id="topic-metrics">
+          <div class="topic-header">
+            <div>
+              <h2>Software Metrics, GQM, and Scale Types</h2>
+              <p class="section-intro">This is the measurement side of Topic 4. It is about how we measure software qualities in a sensible way rather than relying on vague opinion.</p>
+            </div>
+            <span class="tag">Syllabus topic</span>
+          </div>
+          <div class="topic-blocks">
+            <div class="topic-block">
+              <h3>What this topic is</h3>
+              <p>A software metric is a measurable value used to assess some aspect of software, such as complexity, reliability, or maintainability. GQM means Goal-Question-Metric, a method for choosing useful metrics. Scale types describe the kind of data you are measuring.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Why it matters</h3>
+              <p>The mock paper already tests the limits of using a single metric. This matters because measurement is a core way of reasoning about quality, and questions here can connect theory, judgement, and practical evaluation.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Simple explanation from scratch</h3>
+              <p>If you want to improve software, you need evidence. Metrics are one kind of evidence, but they are only useful when they match the real goal. GQM helps with that: first decide the goal, then ask what question you need answered, then choose the metric that actually helps answer it.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Key ideas I must know</h3>
+              <ul>
+                <li>Metric = measurable value.</li>
+                <li>GQM = Goal → Question → Metric.</li>
+                <li>Scale types: nominal, ordinal, interval, ratio.</li>
+                <li>Why one metric rarely captures a whole quality attribute.</li>
+                <li>Why metrics need interpretation, not blind trust.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>Example</h3>
+              <p>If the goal is to improve maintainability, the question might be “Which modules are hardest to understand and change safely?” Useful metrics might include complexity measures or change frequency, but you would still combine them with code review and human judgement.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Common mistakes</h3>
+              <ul>
+                <li>Treating one metric as a complete truth.</li>
+                <li>Choosing a metric before deciding the goal.</li>
+                <li>Mixing up the different scale types.</li>
+                <li>Forgetting that some qualities need both numbers and judgement.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>How it appears in past exams</h3>
+              <p>The current mock paper directly asks about the limitations of using a single metric for maintainability or reliability. That makes this a useful revision area because it helps you answer both direct metrics questions and broader quality-evaluation questions.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Short memory tricks</h3>
+              <ul>
+                <li>Measure for a reason, not just because you can.</li>
+                <li>GQM = start with the goal.</li>
+                <li>One metric = one clue, not the whole answer.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quiz-box">
+            <h3>5 quick quiz questions</h3>
+            <ol>
+              <li>What is a software metric?</li>
+              <li>What does GQM stand for?</li>
+              <li>Why is one metric often not enough for maintainability?</li>
+              <li>Name one of the standard scale types.</li>
+              <li>Should metrics replace human judgement completely?</li>
+            </ol>
+            <details>
+              <summary>Show short answers</summary>
+              <ol>
+                <li>A measurable value used to assess some software property.</li>
+                <li>Goal-Question-Metric.</li>
+                <li>Because maintainability has several dimensions, not just one.</li>
+                <li>Nominal, ordinal, interval, or ratio.</li>
+                <li>No, they should support judgement, not replace it fully.</li>
+              </ol>
+            </details>
+          </div>
+          <div class="exam-pattern">
+            <h3>Short exam answer guidance</h3>
+            <p>If a metrics question appears, define the metric idea, explain why quality is multi-dimensional, then use GQM or a concrete example to show how measurement should be chosen properly.</p>
+          </div>
+        </section>
+
+        <section class="section-card topic-section" id="topic-solid">
+          <div class="topic-header">
+            <div>
+              <h2>SOLID Principles</h2>
+              <p class="section-intro">SOLID is a design-principles topic, so it belongs in Topic 4 even though it is not explicit in the current mock paper. It helps explain how better design improves maintainability.</p>
+            </div>
+            <span class="tag">Syllabus topic</span>
+          </div>
+          <div class="topic-blocks">
+            <div class="topic-block">
+              <h3>What this topic is</h3>
+              <p>SOLID is a set of five design principles used in object-oriented software. They are Single Responsibility, Open-Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Why it matters</h3>
+              <p>Even when an exam does not ask for SOLID by name, these ideas matter because they support answers about quality, maintainability, extensibility, and good design choices.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Simple explanation from scratch</h3>
+              <p>SOLID is really about making code easier to change without breaking everything else. The common theme is reducing unnecessary dependencies and keeping each part of the program focused on a sensible job.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Key ideas I must know</h3>
+              <ul>
+                <li>Single Responsibility: one main reason to change.</li>
+                <li>Open-Closed: open for extension, closed for modification.</li>
+                <li>Liskov Substitution: subtypes should behave properly when used as the base type.</li>
+                <li>Interface Segregation: do not force clients to depend on methods they do not need.</li>
+                <li>Dependency Inversion: depend on abstractions rather than concrete low-level details.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>Example</h3>
+              <p>If one class handles user input, business rules, database writing, and report printing, it has too many responsibilities. Splitting those concerns makes testing and maintenance easier, which is the spirit of Single Responsibility.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Common mistakes</h3>
+              <ul>
+                <li>Trying to memorise the letters without understanding the purpose behind them.</li>
+                <li>Giving definitions with no example.</li>
+                <li>Treating SOLID as rigid laws instead of design guidance.</li>
+                <li>Using “good design” as a vague phrase without naming the principle involved.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>How it appears in past exams</h3>
+              <p>It is not directly visible in the current mock paper. Treat it as broader syllabus material that may support design, quality, or maintainability answers.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Short memory tricks</h3>
+              <ul>
+                <li>SRP = one job.</li>
+                <li>OCP = extend, do not keep rewriting.</li>
+                <li>ISP = small useful interfaces.</li>
+                <li>DIP = depend on abstractions.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quiz-box">
+            <h3>5 quick quiz questions</h3>
+            <ol>
+              <li>What does SOLID stand for?</li>
+              <li>What is the idea behind Single Responsibility?</li>
+              <li>What does Open-Closed mean in simple terms?</li>
+              <li>Why can Interface Segregation help design quality?</li>
+              <li>Why is SOLID useful for maintainability?</li>
+            </ol>
+            <details>
+              <summary>Show short answers</summary>
+              <ol>
+                <li>Five design principles: Single Responsibility, Open-Closed, Liskov Substitution, Interface Segregation, Dependency Inversion.</li>
+                <li>A class or module should have one main reason to change.</li>
+                <li>You should be able to add behaviour without constantly editing existing code.</li>
+                <li>Because clients should not depend on methods they do not use.</li>
+                <li>Because it encourages cleaner structure and fewer harmful dependencies.</li>
+              </ol>
+            </details>
+          </div>
+          <div class="exam-pattern">
+            <h3>Short exam answer guidance</h3>
+            <p>If SOLID appears directly, define the named principle clearly, then give one tiny example of when it helps. If it appears indirectly, use it to support arguments about maintainability or design quality.</p>
+          </div>
+        </section>
+
+        <section class="section-card topic-section" id="topic-cicd">
+          <div class="topic-header">
+            <div>
+              <h2>CI/CD Pipeline</h2>
+              <p class="section-intro">CI/CD is the process side of quality: how software changes are built, tested, and delivered safely and repeatedly.</p>
+            </div>
+            <span class="tag">Syllabus topic</span>
+          </div>
+          <div class="topic-blocks">
+            <div class="topic-block">
+              <h3>What this topic is</h3>
+              <p>CI/CD means Continuous Integration and Continuous Delivery or Deployment. It is a pipeline that automatically builds, tests, and prepares or performs release steps when code changes are made.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Why it matters</h3>
+              <p>Even though the current mock paper does not ask for it explicitly, it matters because it connects software quality to real development practice: building, testing, and releasing changes safely and repeatedly.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Simple explanation from scratch</h3>
+              <p>Instead of waiting until the end of a project to find problems, CI/CD checks changes continuously. A good pipeline runs automated checks early, so faults are found sooner and releases become more consistent.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Key ideas I must know</h3>
+              <ul>
+                <li>Continuous Integration: merge and test changes frequently.</li>
+                <li>Continuous Delivery: software is kept ready for release.</li>
+                <li>Continuous Deployment: releases can happen automatically.</li>
+                <li>Build, test, and deploy stages.</li>
+                <li>Why automation helps quality and confidence.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>Example</h3>
+              <p>A simple pipeline might run unit tests every time code is pushed, then build the application, and only allow release if the tests pass. That reduces the chance of shipping broken software.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Common mistakes</h3>
+              <ul>
+                <li>Mixing up Continuous Delivery and Continuous Deployment.</li>
+                <li>Talking about the pipeline as if it removes the need for good testing.</li>
+                <li>Describing automation without explaining the quality benefit.</li>
+              </ul>
+            </div>
+            <div class="topic-block">
+              <h3>How it appears in past exams</h3>
+              <p>It is not explicit in the current mock paper. Revise it as broader module content that supports questions about quality practice, testing, automation, and reliable delivery.</p>
+            </div>
+            <div class="topic-block">
+              <h3>Short memory tricks</h3>
+              <ul>
+                <li>CI = integrate often.</li>
+                <li>CD = keep it releasable.</li>
+                <li>Automation catches problems earlier.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="quiz-box">
+            <h3>5 quick quiz questions</h3>
+            <ol>
+              <li>What does CI/CD stand for?</li>
+              <li>What is the difference between Continuous Delivery and Continuous Deployment?</li>
+              <li>Name three common pipeline stages.</li>
+              <li>Why is CI/CD useful for quality?</li>
+              <li>Does CI/CD remove the need for good tests?</li>
+            </ol>
+            <details>
+              <summary>Show short answers</summary>
+              <ol>
+                <li>Continuous Integration and Continuous Delivery or Deployment.</li>
+                <li>Delivery keeps software ready to release; Deployment can release automatically.</li>
+                <li>Build, test, and deploy.</li>
+                <li>Because it automates checking and finds problems earlier.</li>
+                <li>No, it depends on good tests and good pipeline design.</li>
+              </ol>
+            </details>
+          </div>
+          <div class="exam-pattern">
+            <h3>Short exam answer guidance</h3>
+            <p>If CI/CD appears, define the pipeline, explain the stages, and end with the software-quality benefit such as faster feedback, safer releases, or more consistent testing.</p>
+          </div>
+        </section>
+
+        <section class="section-card" id="diagrams">
+          <h2>Key Diagrams and Flows to Memorise</h2>
+          <p class="section-intro">The strongest revision pages are not only about reading. They also tell you what you should be able to reproduce on blank paper. These are the most useful diagram or flow types supported by the materials in this folder.</p>
+
+          <div class="grid-two">
+            <div class="mini-card">
+              <h3>1. UML Class Diagram</h3>
+              <ul>
+                <li>Be able to draw classes, attributes, and relationships neatly.</li>
+                <li>Always label multiplicities if the scenario gives number limits.</li>
+                <li>If the relationship has its own data, consider a separate class such as Enrolment.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>2. DFSM for a simple language</h3>
+              <ul>
+                <li>Mark the start state clearly.</li>
+                <li>Show accepting states explicitly.</li>
+                <li>Include every transition, even to a dead state if needed.</li>
+                <li>Be ready to explain what information each state is remembering.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>3. Parse Tree</h3>
+              <ul>
+                <li>Start from the grammar’s start symbol.</li>
+                <li>Expand according to the exact production rules used.</li>
+                <li>Check that the leaves read left to right as the required string.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>4. Compiler Front-End Flow</h3>
+              <ul>
+                <li>Source code → lexical analyser → tokens → parser.</li>
+                <li>Be ready to say where the symbol table fits in and why it matters.</li>
+                <li>Keep lexeme, token, and parser roles separate in your explanation.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="answer-frame">
+            <h3>Fast diagram checklist</h3>
+            <ul>
+              <li>Did I label every part that carries marks?</li>
+              <li>Did I include the start state, accepting states, or multiplicities where relevant?</li>
+              <li>Is the diagram complete, not just roughly suggested?</li>
+              <li>If the drawing is basic, did I at least make the logic unmistakably clear?</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section-card" id="exam-technique">
+          <h2>Exam Technique</h2>
+          <p class="section-intro">In this module, strong answers are usually built from short, clear pieces rather than one long paragraph. The mark scheme likes answers that show the structure of your thinking.</p>
+          <div class="grid-two">
+            <div class="mini-card">
+              <h3>How to answer “explain” questions</h3>
+              <ul>
+                <li>Start with a one-sentence definition.</li>
+                <li>Then say how or why it works.</li>
+                <li>Use the scenario if one is given.</li>
+                <li>Finish with the consequence or benefit.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>How to answer “compare” questions</h3>
+              <ul>
+                <li>Use the same comparison point for both items.</li>
+                <li>Show at least one clear difference and, where sensible, one similarity.</li>
+                <li>Keep the comparison direct instead of writing two separate notes.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>How to answer “discuss / evaluate” questions</h3>
+              <ul>
+                <li>Give more than one relevant point.</li>
+                <li>Show balance, such as benefit and limitation.</li>
+                <li>End with a short judgement or conclusion.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>How to answer “design / model” questions</h3>
+              <ul>
+                <li>Turn the scenario rules into components, states, classes, or relationships.</li>
+                <li>Label everything clearly.</li>
+                <li>After the design, add one short explanation of why it fits.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>How to handle diagram questions</h3>
+              <ul>
+                <li>Show the required notation, not just a sketch.</li>
+                <li>Label start states, accepting states, relationships, or multiplicities.</li>
+                <li>If you are unsure, a neat text version is better than an unreadable drawing.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>Where students lose marks</h3>
+              <ul>
+                <li>They ignore the command word.</li>
+                <li>They forget the exact number of requested points.</li>
+                <li>They use jargon without defining it.</li>
+                <li>They fail to apply the answer to the given scenario.</li>
+                <li>They leave diagrams incomplete.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mark range</th>
+                  <th>What a strong answer usually needs</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>5 marks</strong></td>
+                  <td>A definition plus about two explained points, often with a small example.</td>
+                </tr>
+                <tr>
+                  <td><strong>10 marks</strong></td>
+                  <td>A definition, three or four developed points, and a clear scenario link.</td>
+                </tr>
+                <tr>
+                  <td><strong>15 marks</strong></td>
+                  <td>A short plan, several explained points, and a more balanced structure.</td>
+                </tr>
+                <tr>
+                  <td><strong>25 marks</strong></td>
+                  <td>Coverage across all subparts, accurate terminology, clear structure, examples where useful, and enough detail to collect marks steadily across the whole answer.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout">
+            <strong>Fast checking rule before you move on:</strong> Did I define the term, answer the command word, give the number of points requested, and use the scenario if there was one?
+          </div>
+
+          <div class="focus-grid">
+            <div class="focus-card">
+              <h3>Question-family answer frame: UML and OCL</h3>
+              <ol>
+                <li>Translate the scenario rules into plain English first.</li>
+                <li>Draw or describe the model structure clearly.</li>
+                <li>Write one OCL rule per business rule.</li>
+                <li>Finish with the reason OCL helps, such as precision or checkability.</li>
+              </ol>
+            </div>
+            <div class="focus-card">
+              <h3>Question-family answer frame: concurrency</h3>
+              <ol>
+                <li>Define the problem.</li>
+                <li>Describe the bad effect in the given system.</li>
+                <li>Name the mechanism.</li>
+                <li>Explain how it improves correctness or performance.</li>
+              </ol>
+            </div>
+            <div class="focus-card">
+              <h3>Question-family answer frame: formal languages</h3>
+              <ol>
+                <li>State the formal definition.</li>
+                <li>Show the steps, states, or derivation clearly.</li>
+                <li>Give one example in and one example out if useful.</li>
+                <li>Explain the key reasoning idea, such as memory or precedence.</li>
+              </ol>
+            </div>
+            <div class="focus-card">
+              <h3>Question-family answer frame: quality and testing</h3>
+              <ol>
+                <li>Name the risk or technique.</li>
+                <li>Explain what it means.</li>
+                <li>Apply it to the safety scenario.</li>
+                <li>State the practical reliability benefit.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card" id="rapid-review">
+          <h2>Rapid Review</h2>
+          <p class="section-intro">Use this section in the final days before the exam or as a quick memory test after you have studied the full topics.</p>
+
+          <div class="grid-two">
+            <div class="mini-card">
+              <h3>High-priority summary</h3>
+              <ul>
+                <li>Formal Specification and Languages &amp; Reasoning are the biggest direct exam themes in the available materials.</li>
+                <li>UML/OCL questions reward precision and completeness.</li>
+                <li>FSM questions reward clear state design and memory reasoning.</li>
+                <li>Grammar, regular-expression, and compiler questions reward visible working steps and short accurate definitions.</li>
+                <li>Concurrency questions reward scenario-based explanation and now clearly link to deadlock, semaphores, scheduling, and thread pools.</li>
+                <li>Topic 4 now clearly includes metrics, high-integrity systems, SOLID, and CI/CD.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>Common compare / contrast pairs</h3>
+              <ul>
+                <li>Structural vs behavioural constraints.</li>
+                <li>Invariant vs precondition vs postcondition.</li>
+                <li>DFA vs NFA.</li>
+                <li>Lexical analysis vs parsing.</li>
+                <li>Functional vs non-functional testing.</li>
+                <li>Verification vs validation.</li>
+                <li>Mutex vs semaphore.</li>
+                <li>Concurrency vs parallelism.</li>
+                <li>Continuous Delivery vs Continuous Deployment.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Quick-fire definition</th>
+                  <th>Answer to memorise</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Invariant</td><td>A rule that must always hold in the model.</td></tr>
+                <tr><td>Race condition</td><td>A bug caused by unpredictable timing between concurrent operations.</td></tr>
+                <tr><td>Thread pool</td><td>A reusable group of threads used to handle tasks.</td></tr>
+                <tr><td>DFA</td><td>A finite automaton with exactly one transition per symbol from each state.</td></tr>
+                <tr><td>Token</td><td>A labelled unit of source code such as a keyword, identifier, or operator.</td></tr>
+                <tr><td>Symbol table</td><td>A structure that stores information about identifiers, such as type and scope.</td></tr>
+                <tr><td>Fault tolerance</td><td>The ability to keep operating safely when faults happen.</td></tr>
+                <tr><td>Functional testing</td><td>Testing what the system does against the requirements.</td></tr>
+                <tr><td>GQM</td><td>Goal-Question-Metric: choose metrics based on the goal and the question you need answered.</td></tr>
+                <tr><td>SOLID</td><td>Five design principles used to improve maintainability and design quality.</td></tr>
+                <tr><td>CI/CD</td><td>An automated build-test-release pipeline for continuous software delivery.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid-two">
+            <div class="mini-card">
+              <h3>Common diagrams, model types, or flows to memorise</h3>
+              <ul>
+                <li>A UML class diagram with classes, attributes, and multiplicities.</li>
+                <li>A DFSM with start state, accepting states, transitions, and a dead state if needed.</li>
+                <li>A parse tree for a short CFG example.</li>
+                <li>The simple compiler front-end flow: source code → lexer → tokens → parser.</li>
+                <li>A simple CI/CD flow: code change → build → test → release.</li>
+              </ul>
+            </div>
+            <div class="mini-card">
+              <h3>Short memory dump list</h3>
+              <ul>
+                <li>Business rule → UML/OCL rule.</li>
+                <li>Shared resource → race risk → synchronization mechanism.</li>
+                <li>Resource waiting cycle → deadlock risk → prevention or avoidance idea.</li>
+                <li>Input symbols → state transitions → accept or reject.</li>
+                <li>Grammar rule → derivation → parse tree.</li>
+                <li>Goal → question → metric.</li>
+                <li>Quality risk → mitigation → verification method.</li>
+                <li>Change to code → CI/CD pipeline → safer release.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <p class="footer-note">Built from the real materials currently present in the folder: one mock paper and the same paper with a marking scheme. If lecture slides are added later, this guide can be extended further without changing its structure.</p>
+  </div>
+
+  <script>
+    const navToggle = document.querySelector('.nav-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const navLinks = Array.from(document.querySelectorAll('.sidebar a[href^="#"]'));
+    const sections = Array.from(document.querySelectorAll('section[id]'));
+    const mobileMq = window.matchMedia('(max-width: 820px)');
+    const tables = Array.from(document.querySelectorAll('.table-wrap table'));
+
+    const setActiveLink = (id) => {
+      navLinks.forEach((link) => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+      });
+    };
+
+    const closeSidebarOnMobile = () => {
+      if (!mobileMq.matches || !sidebar || !navToggle) return;
+      sidebar.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.textContent = 'Show guide contents';
+    };
+
+    if (navToggle && sidebar) {
+      navToggle.addEventListener('click', () => {
+        const open = sidebar.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', String(open));
+        navToggle.textContent = open ? 'Hide guide contents' : 'Show guide contents';
+      });
+    }
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        const targetId = link.getAttribute('href').slice(1);
+        setActiveLink(targetId);
+        closeSidebarOnMobile();
+      });
+    });
+
+    tables.forEach((table) => {
+      const headers = Array.from(table.querySelectorAll('thead th')).map((th) => th.textContent.trim());
+      if (!headers.length) return;
+      table.querySelectorAll('tbody tr').forEach((row) => {
+        Array.from(row.children).forEach((cell, index) => {
+          if (!cell.hasAttribute('data-label')) {
+            cell.setAttribute('data-label', headers[index] || '');
+          }
+        });
+      });
+    });
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActiveLink(visible.target.id);
+      }, {
+        rootMargin: '-12% 0px -72% 0px',
+        threshold: [0.05, 0.15, 0.3]
+      });
+
+      sections.forEach((section) => observer.observe(section));
+    } else if (sections.length) {
+      setActiveLink(sections[0].id);
+    }
+  </script>
+</body>
+</html>
