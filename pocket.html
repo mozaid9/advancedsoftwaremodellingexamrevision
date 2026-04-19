@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASM Pocket Guide — Q1 Q2 Q5</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 16px;
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-text-size-adjust: 100%;
+  }
+  h1 {
+    font-size: 22px;
+    margin: 0 0 4px;
+    color: var(--accent);
+  }
+  h2 {
+    font-size: 19px;
+    margin: 28px 0 10px;
+    padding: 8px 12px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    color: #000;
+    border-radius: 6px;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: 16px;
+    margin: 18px 0 6px;
+    color: var(--accent);
+  }
+  p { margin: 6px 0; }
+  ul, ol {
+    padding-left: 22px;
+    margin: 6px 0;
+  }
+  li { margin: 4px 0; }
+  code {
+    background: #1f2933;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 14px;
+    color: var(--purple);
+    word-break: break-word;
+  }
+  pre {
+    background: #0a0d12;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    overflow-x: auto;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  pre code {
+    background: transparent;
+    padding: 0;
+    color: var(--text);
+  }
+  .box {
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    background: var(--panel);
+    padding: 10px 14px;
+    margin: 10px 0;
+    border-radius: 6px;
+  }
+  .box.key    { border-left-color: var(--accent); }
+  .box.tip    { border-left-color: var(--green);  }
+  .box.warn   { border-left-color: var(--yellow); }
+  .box.mistake{ border-left-color: var(--red);    }
+  .box.model  { border-left-color: var(--purple); }
+  .box b, .box strong { color: var(--accent); }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .tag.m6 { background: var(--accent); color: #000; }
+  .tag.m4 { background: var(--green);  color: #000; }
+  .tag.m3 { background: var(--yellow); color: #000; }
+  .tag.m2 { background: var(--purple); color: #000; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: var(--panel); color: var(--accent); }
+  .toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 16px 0;
+  }
+  .toc a {
+    color: var(--accent);
+    text-decoration: none;
+    display: block;
+    padding: 4px 0;
+  }
+  .toc a:active { color: var(--purple); }
+  .header {
+    text-align: center;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .header p { color: var(--muted); font-size: 14px; }
+  .countdown {
+    background: var(--red);
+    color: #000;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-block;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .back-top {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    background: var(--accent);
+    color: #000;
+    padding: 10px 14px;
+    border-radius: 50%;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    z-index: 99;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚡ ASM Pocket Guide</h1>
+  <p>Q1 · Q2 · Q5 — everything you need</p>
+  <div class="countdown">🎯 Exam: Tue 21 April · Target 60%</div>
+</div>
+
+<div class="toc">
+  <strong>Contents</strong>
+  <a href="#exam">📋 Exam Basics &amp; Strategy</a>
+  <a href="#q1">🟦 Q1 — UML &amp; OCL (25 marks)</a>
+  <a href="#q2">🟩 Q2 — Concurrency (25 marks)</a>
+  <a href="#q5">🟥 Q5 — Quality &amp; Testing (25 marks)</a>
+  <a href="#templates">📝 Answer Templates</a>
+  <a href="#rapid">⚡ Rapid-Fire Recall</a>
+</div>
+
+<!-- ========== EXAM BASICS ========== -->
+<h2 id="exam">📋 Exam Basics</h2>
+
+<div class="box key">
+  <b>Format:</b> 2 hours · 5 questions · answer <b>any 3</b> · 25 marks each · total 75<br>
+  <b>Your picks:</b> Q1 + Q2 + Q5<br>
+  <b>Time:</b> 40 min per question — <b>HARD STOP</b>. Going over caps marks.<br>
+  <b>Target:</b> 45/75 = 60% → 15/25 per question.
+</div>
+
+<div class="box warn">
+  <b>Module leader said:</b>
+  <ul>
+    <li>Lectures 17 &amp; 18 (CI/CD, SOLID) <b>NOT examined</b></li>
+    <li>Q3 &amp; Q4 "very straightforward" — but you're not doing them</li>
+    <li>Q5 single metric = define first, then 2 marks per factor</li>
+    <li>No official marking scheme released — individual variation expected</li>
+    <li>Deadlock <b>may</b> appear in Q2</li>
+  </ul>
+</div>
+
+<div class="box tip">
+  <b>Universal tips:</b>
+  <ol>
+    <li>Answer <b>every sub-part</b> — a blank = 0</li>
+    <li>Use the <b>scenario given</b> — don't invent your own</li>
+    <li>Show <b>syntax</b> when asked (OCL, FSM notation)</li>
+    <li>Define terms before applying them</li>
+    <li>Bullet points &gt; long paragraphs when time is tight</li>
+  </ol>
+</div>
+
+<hr>
+
+<!-- ========== Q1 UML OCL ========== -->
+<h2 id="q1">🟦 Q1 — UML &amp; OCL</h2>
+
+<h3><span class="tag m6">6 marks</span> Q1a — Draw the class diagram</h3>
+<div class="box key">
+  <b>Include for every class:</b> CARM
+  <ul>
+    <li><b>C</b>lasses (box with name)</li>
+    <li><b>A</b>ttributes (name : type)</li>
+    <li><b>R</b>elationships (lines between classes)</li>
+    <li><b>M</b>ultiplicities (1, *, 0..1, 1..*)</li>
+  </ul>
+</div>
+<div class="box model">
+  <b>Course Registration example:</b>
+  <pre>Student (id, name, feesOwed)
+   ├── *..4 enrolledCourses
+Course (code, name)
+   └── *..30 students</pre>
+  <b>Association:</b> Student —*..4 — Course —*..30
+</div>
+
+<h3><span class="tag m6">6 marks</span> Q1b — Three OCL invariants</h3>
+<div class="box key">
+  <b>Invariant = always true for a class</b> (before, during, after any operation)<br>
+  Syntax: <code>context ClassName inv: condition</code>
+</div>
+<pre><code>-- C1: Max 4 courses per student
+context Student
+inv: self.enrolledCourses->size() &lt;= 4
+
+-- C2: Max 30 students per course
+context Course
+inv: self.students->size() &lt;= 30
+
+-- C3: Must pay fees before enrolling
+context Student
+inv: self.enrolledCourses->size() &gt; 0
+     implies self.feesOwed = 0</code></pre>
+
+<h3><span class="tag m6">6 marks</span> Q1c — Pre &amp; Postconditions</h3>
+<div class="box key">
+  <b>Precondition (pre:)</b> — must be TRUE before operation<br>
+  <b>Postcondition (post:)</b> — must be TRUE after operation<br>
+  <b>@pre</b> — refers to value BEFORE operation ran
+</div>
+<pre><code>context Student::enrollCourse(c : Course)
+
+pre:  self.feesOwed = 0
+  and self.enrolledCourses->size() &lt; 4
+  and c.students->size() &lt; 30
+
+post: self.enrolledCourses =
+        self.enrolledCourses@pre->including(c)
+  and c.students =
+        c.students@pre->including(self)</code></pre>
+
+<h3><span class="tag m3">3 marks</span> Q1d — Structural vs Behavioural</h3>
+<div class="box key">
+  <b>Structural constraint:</b> about class STATE (data, attributes, associations). E.g. invariant on size of a collection.<br><br>
+  <b>Behavioural constraint:</b> about OPERATIONS (what happens when called). E.g. pre/postconditions on methods.
+</div>
+<div class="box model">
+  <b>Example pairing:</b><br>
+  • Structural: <code>inv: age &gt;= 18</code> (always true about state)<br>
+  • Behavioural: <code>pre: balance &gt; amount</code> (checked when withdraw() runs)
+</div>
+
+<h3><span class="tag m4">4 marks</span> Q1e — 2 advantages of OCL over natural language</h3>
+<div class="box model">
+  <ol>
+    <li><b>Precise and unambiguous</b> — natural language has vague words like "many" or "soon"; OCL has defined operators (<code>&lt;=</code>, <code>size()</code>, <code>implies</code>)</li>
+    <li><b>Tool-verifiable</b> — OCL can be checked by software tools (USE, Dresden OCL) to find contradictions; English can't be auto-checked</li>
+    <li><i>(backup)</i> <b>Formal</b> — grounded in set theory/logic, enables model-checking and code generation</li>
+  </ol>
+</div>
+
+<hr>
+
+<!-- ========== Q2 CONCURRENCY ========== -->
+<h2 id="q2">🟩 Q2 — Concurrency</h2>
+
+<h3><span class="tag m4">4 marks</span> Race conditions</h3>
+<div class="box key">
+  <b>Race condition:</b> two or more threads access a shared resource concurrently, and the final result depends on the <b>unpredictable order</b> of execution → data corruption, inconsistent state.
+</div>
+<div class="box model">
+  <b>Example:</b> Two delivery drivers both accept the same order at the same millisecond. Without synchronization, both get assigned → duplicate delivery, lost money.
+</div>
+
+<h3><span class="tag m6">6 marks</span> When synchronization is needed</h3>
+<div class="box key">
+  When a resource is <b>shared</b> AND at least one thread <b>writes</b> to it (read-only is fine without sync).
+  <ul>
+    <li>Shared memory (counters, queues, caches)</li>
+    <li>Shared files/databases</li>
+    <li>Hardware resources (printers, sensors)</li>
+  </ul>
+</div>
+
+<h3><span class="tag m6">6 marks</span> Synchronization mechanisms</h3>
+<table>
+  <tr><th>Mechanism</th><th>How it works</th><th>Use when</th></tr>
+  <tr>
+    <td><b>Mutex</b></td>
+    <td>Only 1 thread at a time (lock/unlock)</td>
+    <td>Single resource, exclusive access</td>
+  </tr>
+  <tr>
+    <td><b>Semaphore</b></td>
+    <td>Counter — up to N threads allowed</td>
+    <td>Pool of N resources (e.g. 5 DB connections)</td>
+  </tr>
+  <tr>
+    <td><b>Monitor</b></td>
+    <td>High-level — auto lock/unlock around methods</td>
+    <td>Entire object needs protection (Java <code>synchronized</code>)</td>
+  </tr>
+</table>
+
+<h3><span class="tag m4">4 marks</span> Thread pools — advantages</h3>
+<div class="box key">
+  <b>Thread pool:</b> pre-created pool of worker threads reused across tasks instead of creating a new thread per task.
+</div>
+<div class="box model">
+  <ol>
+    <li><b>Reduced overhead</b> — thread creation is expensive; pool avoids it</li>
+    <li><b>Better resource management</b> — cap max threads, prevents exhaustion</li>
+    <li><b>Predictable performance</b> — bounded concurrency, no runaway thread spawning</li>
+  </ol>
+</div>
+
+<h3><span class="tag m3">3 marks</span> Why excessive threading hurts</h3>
+<div class="box mistake">
+  <ul>
+    <li><b>Context-switching overhead</b> — CPU spends more time switching than executing</li>
+    <li><b>Lock contention</b> — threads wait for each other, defeats the point</li>
+    <li><b>Memory exhaustion</b> — each thread has its own stack</li>
+  </ul>
+</div>
+
+<h3>Bonus: Deadlock (may appear)</h3>
+<div class="box warn">
+  <b>Deadlock:</b> two threads each hold a lock the other needs → both wait forever.<br><br>
+  <b>4 conditions (Coffman):</b> mutual exclusion, hold-and-wait, no preemption, circular wait<br><br>
+  <b>Prevention:</b> lock ordering (always acquire locks in same order)
+</div>
+
+<hr>
+
+<!-- ========== Q5 QUALITY ========== -->
+<h2 id="q5">🟥 Q5 — Quality &amp; Testing</h2>
+
+<h3><span class="tag m4">4 marks</span> Q5a — Reliability risks (scenario-based)</h3>
+<div class="box key">
+  <b>Formula:</b> Bad input → Wrong decision → Real-world consequence<br><br>
+  <b>Two risks to bank:</b>
+  <ol>
+    <li><b>Stale/delayed data</b> → system acts on outdated readings → wrong timing decisions → congestion/accidents</li>
+    <li><b>Missing/corrupted data</b> → system defaults or freezes → unsafe state (e.g. all-red stuck signals) → collision risk</li>
+  </ol>
+</div>
+
+<h3><span class="tag m4">4 marks</span> Q5b — Fault tolerance strategies</h3>
+<div class="box model">
+  <ol>
+    <li><b>Redundant sensors</b> — multiple sensors per location, voting/majority logic discards outliers (hardware redundancy)</li>
+    <li><b>Graceful degradation</b> — if sensors fail, system falls back to safe default cycle (fixed timing) rather than crashing</li>
+    <li><i>(backup)</i> <b>Watchdog timer</b> — monitors sensor response; triggers fallback if no data in X seconds</li>
+  </ol>
+</div>
+
+<h3><span class="tag m4">4 marks</span> Q5c — Functional vs Non-Functional</h3>
+<table>
+  <tr><th></th><th>Functional</th><th>Non-Functional</th></tr>
+  <tr><td><b>Tests</b></td><td>WHAT the system does</td><td>HOW WELL it does it</td></tr>
+  <tr><td><b>Example</b></td><td>"Light turns red when pedestrian presses button"</td><td>"Light changes within 500ms of sensor input"</td></tr>
+  <tr><td><b>Verifies</b></td><td>Requirements are met</td><td>Quality attributes (speed, reliability, security)</td></tr>
+</table>
+
+<h3><span class="tag m4">4 marks</span> Q5d — V&amp;V techniques (pick 3)</h3>
+<div class="box model">
+  <ul>
+    <li><b>Code inspection / peer review</b> — static, manual reading for defects before execution</li>
+    <li><b>Systematic testing</b> — unit → integration → system → acceptance; black-box + white-box</li>
+    <li><b>Formal methods / model checking</b> — mathematical proof that code meets spec (e.g. OCL, Z notation)</li>
+  </ul>
+</div>
+
+<h3><span class="tag m4">4 marks</span> Q5e — Single metric limitation ⭐ (module leader specifically flagged this)</h3>
+<div class="box warn">
+  <b>Structure your answer in 3 parts:</b>
+  <ol>
+    <li><b>Define "single metric":</b> one numerical value meant to represent an entire quality attribute (1 mark)</li>
+    <li><b>Maintainability is multi-dimensional</b> (2 marks): readability, modularity, testability, documentation. No single number captures all. E.g. low cyclomatic complexity alone doesn't mean maintainable if variable names are awful.</li>
+    <li><b>Reliability is multi-dimensional</b> (2 marks): MTBF, failure rate, recovery time, availability. A system with high MTBF but slow recovery is still poor reliability. Need a <b>composite</b> of metrics.</li>
+  </ol>
+</div>
+
+<h3><span class="tag m3">3 marks</span> Unit testing in high-integrity software</h3>
+<div class="box model">
+  <ul>
+    <li><b>Early defect detection</b> — bugs caught at unit level cost 10x less than at system level</li>
+    <li><b>Regression safety net</b> — changes can be verified instantly, preserving past certification</li>
+    <li><b>Certification support</b> — DO-178C, IEC 61508 require documented test coverage</li>
+  </ul>
+</div>
+
+<hr>
+
+<!-- ========== TEMPLATES ========== -->
+<h2 id="templates">📝 Answer Templates</h2>
+
+<div class="box tip">
+  <b>OCL invariant template:</b>
+  <pre><code>context [Class]
+inv: self.[attribute/collection]
+     [operator] [value]</code></pre>
+</div>
+
+<div class="box tip">
+  <b>OCL pre/post template:</b>
+  <pre><code>context [Class]::[operation]([params])
+pre:  [condition before]
+post: self.[attr] = self.[attr]@pre + [change]
+  and [other guarantees]</code></pre>
+</div>
+
+<div class="box tip">
+  <b>Reliability risk template (Q5a):</b><br>
+  "If [input fails], the system will [wrong behaviour], causing [real-world consequence]."
+</div>
+
+<div class="box tip">
+  <b>Define-then-apply template (Q5e):</b><br>
+  "A [concept] is [definition]. Applied to [factor1], [explanation with example]. Applied to [factor2], [explanation with example]. Therefore, a single metric is insufficient."
+</div>
+
+<hr>
+
+<!-- ========== RAPID FIRE ========== -->
+<h2 id="rapid">⚡ Rapid-Fire Recall</h2>
+
+<div class="box key">
+  <b>OCL:</b>
+  <ul>
+    <li><b>context</b> X inv: Y — binds invariant to class</li>
+    <li><b>implies</b> — logical "if A then B"</li>
+    <li><b>-&gt;size()</b> — collection size</li>
+    <li><b>-&gt;including(x)</b> — add to collection</li>
+    <li><b>@pre</b> — value before operation</li>
+    <li><b>self</b> — the current object</li>
+  </ul>
+</div>
+
+<div class="box key">
+  <b>Concurrency keywords:</b>
+  <ul>
+    <li><b>Race condition</b> — unpredictable result from unsynced access</li>
+    <li><b>Critical section</b> — code that accesses shared resource</li>
+    <li><b>Mutex</b> — 1 thread at a time (binary lock)</li>
+    <li><b>Semaphore</b> — N threads (counter)</li>
+    <li><b>Monitor</b> — high-level, auto-synced object</li>
+    <li><b>Thread pool</b> — reusable workers, no per-task creation cost</li>
+    <li><b>Deadlock</b> — circular wait, both hold + need each other's lock</li>
+  </ul>
+</div>
+
+<div class="box key">
+  <b>Testing keywords:</b>
+  <ul>
+    <li><b>Functional</b> = WHAT</li>
+    <li><b>Non-functional</b> = HOW WELL</li>
+    <li><b>Verification</b> = "building it right" (code matches spec)</li>
+    <li><b>Validation</b> = "building the right thing" (spec matches need)</li>
+    <li><b>MTBF</b> = mean time between failures</li>
+    <li><b>Fault tolerance</b> = continues operating under failure</li>
+    <li><b>Graceful degradation</b> = reduced function, still safe</li>
+  </ul>
+</div>
+
+<div class="box mistake">
+  <b>Common mistakes to avoid:</b>
+  <ul>
+    <li>Writing invariants without <code>context</code> and <code>inv:</code></li>
+    <li>Saying "race condition" without explaining <i>why</i> it's bad</li>
+    <li>Confusing mutex (1) with semaphore (N)</li>
+    <li>Answering Q5a with "affects reliability" — too vague, say WHAT goes wrong</li>
+    <li>Forgetting to <b>define</b> the term before applying it</li>
+  </ul>
+</div>
+
+<div class="box tip">
+  <b>If you only remember 10 things:</b>
+  <ol>
+    <li><b>Invariant = always true</b>, pre = before, post = after</li>
+    <li>OCL syntax: <code>context X inv:</code></li>
+    <li><code>implies</code> = logical "if...then"</li>
+    <li>Race = unsynced shared write → corruption</li>
+    <li>Mutex 1, Semaphore N, Monitor auto</li>
+    <li>Thread pool: avoid creation cost, cap concurrency</li>
+    <li>Reliability risk: stale data → wrong decision → consequence</li>
+    <li>Fault tolerance: redundancy + graceful degradation</li>
+    <li>Functional = what, Non-functional = how well</li>
+    <li>Single metric: DEFINE first, then multi-dimensional argument</li>
+  </ol>
+</div>
+
+<hr>
+<p style="text-align:center; color: var(--muted); font-size: 13px;">
+  Pocket guide v1 · Q1 + Q2 + Q5 focus · Target 45/75 (60%)<br>
+  <a href="index.html" style="color: var(--accent);">→ Full revision guide</a>
+</p>
+
+<a href="#" class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">↑</a>
+
+</body>
+</html>
