@@ -212,7 +212,7 @@
 <div class="header">
   <h1>⚡ ASM Pocket Guide</h1>
   <p>Q1 · Q3 · Q5 — everything you need</p>
-  <div class="countdown">🎯 Exam: Tue 21 April · Target 60%</div>
+  <div class="countdown">🎯 Exam: Tue 21 April · Floor 60%, aim higher</div>
 </div>
 
 <div class="toc">
@@ -221,6 +221,7 @@
   <a href="#q1">🟦 Q1 — UML &amp; OCL (25 marks)</a>
   <a href="#q3">🟩 Q3 — Finite State Machines (25 marks)</a>
   <a href="#q5">🟥 Q5 — Quality &amp; Testing (25 marks)</a>
+  <a href="#higher">🚀 Push Past 60% — Mark-Grabber Tips</a>
   <a href="#practice">🎯 Mock Exam Practice (tap to reveal)</a>
   <a href="#templates">📝 Answer Templates</a>
   <a href="#rapid">⚡ Rapid-Fire Recall</a>
@@ -233,7 +234,8 @@
   <b>Format:</b> 2 hours · 5 questions · answer <b>any 3</b> · 25 marks each · total 75<br>
   <b>Your picks:</b> Q1 + Q3 + Q5<br>
   <b>Time:</b> 40 min per question — <b>HARD STOP</b>. Going over caps marks.<br>
-  <b>Target:</b> 45/75 = 60% → 15/25 per question.
+  <b>Floor:</b> 45/75 = 60% minimum (15/25 per question).<br>
+  <b>Stretch:</b> 60/75 = 80% (20/25 per question) — absolutely possible.
 </div>
 
 <div class="box warn">
@@ -504,6 +506,80 @@ q₀ = start, F = {q₂}
     <li><b>Regression safety net</b> — changes can be verified instantly, preserving past certification</li>
     <li><b>Certification support</b> — DO-178C, IEC 61508 require documented test coverage</li>
   </ul>
+</div>
+
+<hr>
+
+<!-- ========== PUSH PAST 60 ========== -->
+<h2 id="higher">🚀 Push Past 60%</h2>
+
+<div class="box tip">
+  <b>60% is the floor, not the ceiling.</b> With the same 3 days, you can push to 70–80% by tightening these 5 things:
+</div>
+
+<h3>1. Answer EVERY sub-part (even the 2-markers)</h3>
+<div class="box key">
+  <b>Worst mistake under time pressure:</b> skipping Q5f (2 marks) or Q3e (5 marks) because you're over-running Q1. Those are <b>easy marks</b> — 7 skipped marks = 9% lost straight away.<br><br>
+  <b>Rule:</b> 40 min per question. At 35 min, <b>move on</b> even if you haven't finished — write bullet points for remaining parts.
+</div>
+
+<h3>2. Structure every answer: Define → Apply → Example → Conclude</h3>
+<div class="box model">
+  <b>Template for essay-style answers (Q5 especially):</b>
+  <ol>
+    <li><b>Define</b> the concept (1 mark straight away)</li>
+    <li><b>Apply</b> it to the scenario (1–2 marks)</li>
+    <li><b>Give a concrete example</b> from the scenario (1 mark)</li>
+    <li><b>Conclude</b> with why it matters / limitation (1 mark)</li>
+  </ol>
+  Even when content is shaky, this scaffold picks up marks for <b>clarity and structure</b>.
+</div>
+
+<h3>3. OCL syntax precision (Q1 is syntax-heavy)</h3>
+<div class="box warn">
+  <b>Common OCL mistakes that cost 2 marks each:</b>
+  <ul>
+    <li>Missing <code>context</code> or <code>inv:</code> keyword</li>
+    <li>Using <code>.</code> instead of <code>-&gt;</code> for collection operations (<code>self.students-&gt;size()</code>, not <code>self.students.size()</code>)</li>
+    <li>Forgetting <code>@pre</code> in postconditions when referring to old values</li>
+    <li>Writing <code>=&gt;</code> instead of <code>implies</code></li>
+    <li>Using <code>==</code> instead of <code>=</code> for equality</li>
+    <li>Quoting collection operations as methods when they should be arrow-operations</li>
+  </ul>
+</div>
+
+<h3>4. Use exam-grade vocabulary</h3>
+<table>
+  <tr><th>❌ Weak wording</th><th>✅ Mark-grabbing wording</th></tr>
+  <tr><td>"It's bad for the system"</td><td>"Causes data inconsistency and unpredictable state transitions"</td></tr>
+  <tr><td>"It helps with performance"</td><td>"Reduces thread creation overhead and prevents resource exhaustion"</td></tr>
+  <tr><td>"Affects reliability"</td><td>"Stale sensor data leads to incorrect signal timing → congestion"</td></tr>
+  <tr><td>"It tests the system"</td><td>"Verifies system behaviour matches functional requirements"</td></tr>
+  <tr><td>"One number isn't enough"</td><td>"A single scalar metric cannot capture the multi-dimensional nature of maintainability"</td></tr>
+</table>
+
+<h3>5. Name the technique explicitly</h3>
+<div class="box key">
+  Markers look for <b>named concepts</b> — not descriptions.
+  <ul>
+    <li>Don't say "use extra sensors" — say <b>"hardware redundancy with majority voting"</b></li>
+    <li>Don't say "fall back to default" — say <b>"graceful degradation"</b></li>
+    <li>Don't say "thread waits for another" — say <b>"deadlock (circular wait)"</b></li>
+    <li>Don't say "the thing that's always true" — say <b>"class invariant"</b></li>
+  </ul>
+  One correct technical term = 1 bonus mark over a paraphrase.
+</div>
+
+<h3>6. 2-minute review at the end</h3>
+<div class="box tip">
+  Leave <b>2 minutes per question</b> at the end to:
+  <ul>
+    <li>Check every sub-part is attempted (nothing blank)</li>
+    <li>Re-read OCL for syntax errors</li>
+    <li>Add "therefore..." sentences where you left ideas hanging</li>
+    <li>Add a missing example where you just stated a definition</li>
+  </ul>
+  This alone can push you from 16/25 → 19/25 per question.
 </div>
 
 <hr>
@@ -898,7 +974,7 @@ post: self.[attr] = self.[attr]@pre + [change]
 
 <hr>
 <p style="text-align:center; color: var(--muted); font-size: 13px;">
-  Pocket guide v2 · Q1 + Q3 + Q5 focus · Target 45/75 (60%)<br>
+  Pocket guide v3 · Q1 + Q3 + Q5 focus · Floor 60%, stretch 80%<br>
   <a href="index.html" style="color: var(--accent);">→ Full revision guide</a>
 </p>
 
