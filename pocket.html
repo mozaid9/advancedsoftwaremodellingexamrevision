@@ -211,7 +211,7 @@
 
 <div class="header">
   <h1>⚡ ASM Pocket Guide</h1>
-  <p>Q1 · Q3 · Q5 — everything you need</p>
+  <p>Q1 · Q2 · Q5 — everything you need (+ Q3 backup)</p>
   <div class="countdown">🎯 Exam: Tue 21 April · Floor 60%, aim higher</div>
 </div>
 
@@ -219,10 +219,11 @@
   <strong>Contents</strong>
   <a href="#exam">📋 Exam Basics &amp; Strategy</a>
   <a href="#q1">🟦 Q1 — UML &amp; OCL (25 marks)</a>
-  <a href="#q3">🟩 Q3 — Finite State Machines (25 marks)</a>
+  <a href="#q2">🟩 Q2 — Concurrency (25 marks)</a>
   <a href="#q5">🟥 Q5 — Quality &amp; Testing (25 marks)</a>
   <a href="#higher">🚀 Push Past 60% — Mark-Grabber Tips</a>
   <a href="#practice">🎯 Mock Exam Practice (tap to reveal)</a>
+  <a href="#backup">🆘 Q3 FSM — Emergency Backup</a>
   <a href="#templates">📝 Answer Templates</a>
   <a href="#rapid">⚡ Rapid-Fire Recall</a>
 </div>
@@ -232,7 +233,7 @@
 
 <div class="box key">
   <b>Format:</b> 2 hours · 5 questions · answer <b>any 3</b> · 25 marks each · total 75<br>
-  <b>Your picks:</b> Q1 + Q3 + Q5<br>
+  <b>Your picks:</b> Q1 + Q2 + Q5 (Q3 as emergency backup)<br>
   <b>Time:</b> 40 min per question — <b>HARD STOP</b>. Going over caps marks.<br>
   <b>Floor:</b> 45/75 = 60% minimum (15/25 per question).<br>
   <b>Stretch:</b> 60/75 = 80% (20/25 per question) — absolutely possible.
@@ -242,10 +243,10 @@
   <b>Module leader said:</b>
   <ul>
     <li>Lectures 17 &amp; 18 (CI/CD, SOLID) <b>NOT examined</b></li>
-    <li>Q3 &amp; Q4 "very straightforward" — Q3 is your second answer</li>
+    <li>Q1 &amp; Q2 overlap with coursework — you already know these</li>
     <li>Q5 single metric = define first, then 2 marks per factor</li>
     <li>No official marking scheme released — individual variation expected</li>
-    <li>Q3 rewards <b>clean notation</b> — practice drawing diagrams</li>
+    <li>Deadlock <b>may</b> appear in Q2</li>
   </ul>
 </div>
 
@@ -341,110 +342,92 @@ post: self.enrolledCourses =
 
 <hr>
 
-<!-- ========== Q3 FSM ========== -->
-<h2 id="q3">🟩 Q3 — Finite State Machines</h2>
+<!-- ========== Q2 CONCURRENCY ========== -->
+<h2 id="q2">🟩 Q2 — Concurrency</h2>
 
 <div class="box tip">
-  <b>Why this is "very straightforward":</b> Once you know the 5-tuple and how to draw a state diagram, every FSM question is mechanical. No waffle needed — just precise notation.
+  <b>Why this plays to your strengths:</b> Q2 is <b>100% terminology + explanation</b>. No diagrams, no formal notation — just name the technique and explain it in plain English. Every mark is available through clear prose.
 </div>
 
-<h3><span class="tag m6">6 marks</span> Q3a — The 5-tuple (formal definition)</h3>
+<h3><span class="tag m4">5 marks</span> Q2a — Why shared resources need synchronization</h3>
 <div class="box key">
-  <b>An FSM is defined as M = (Q, Σ, δ, q₀, F)</b>
+  When multiple threads access a shared resource <b>concurrently</b>, and at least one thread <b>writes</b> to it, the outcome becomes unpredictable. Without synchronization, interleaved operations can leave data in an inconsistent or corrupted state.
   <ul>
-    <li><b>Q</b> — finite set of <b>states</b> (e.g. {q₀, q₁, q₂})</li>
-    <li><b>Σ</b> (sigma) — finite set of <b>input symbols</b> / alphabet (e.g. {0, 1})</li>
-    <li><b>δ</b> (delta) — <b>transition function</b>: Q × Σ → Q (current state + input → next state)</li>
-    <li><b>q₀</b> — <b>start state</b> (q₀ ∈ Q)</li>
-    <li><b>F</b> — set of <b>accepting/final states</b> (F ⊆ Q)</li>
+    <li>Shared memory (counters, queues, caches)</li>
+    <li>Shared databases / files</li>
+    <li>Hardware resources (printers, sensors)</li>
   </ul>
 </div>
 <div class="box model">
-  <b>Memory trick: "Queen Σends Delta Quickly From"</b><br>
-  Q · Σ · δ · q₀ · F
+  <b>Food delivery example:</b> two threads both try to assign the <i>same driver</i> to <i>different orders</i> at the same millisecond. Without locking the driver database, both reads see the driver as available, both writes mark them assigned — double-booking, lost money.
 </div>
 
-<h3><span class="tag m6">6 marks</span> Q3b — Draw a state diagram</h3>
+<h3><span class="tag m4">5 marks</span> Q2b — Race condition</h3>
 <div class="box key">
-  <b>Standard notation:</b>
-  <ul>
-    <li><b>Circle</b> = state (label inside: q₀, q₁, etc.)</li>
-    <li><b>Double circle</b> = accepting/final state</li>
-    <li><b>Arrow from nowhere</b> → starting state</li>
-    <li><b>Arrow between states</b> labelled with input symbol</li>
-    <li>Every state must have a transition for <b>every input symbol</b> (for DFAs)</li>
-  </ul>
+  <b>Race condition:</b> two or more threads access a shared resource at the same time, and the <b>final result depends on the unpredictable order</b> of their operations → incorrect or corrupted data.
 </div>
 <div class="box model">
-  <b>Example: DFA that accepts strings ending in "01"</b>
-<pre>      0        0
-  →(q₀)──→(q₁)──→(q₁)
-    │ 1    │ 1
-    ↓      ↓
-  (q₀)   ((q₂))   ← double circle = accepting
-
-States Q = {q₀, q₁, q₂}
-Σ = {0, 1}
-q₀ = start, F = {q₂}
-δ(q₀, 0) = q₁     δ(q₀, 1) = q₀
-δ(q₁, 0) = q₁     δ(q₁, 1) = q₂
-δ(q₂, 0) = q₁     δ(q₂, 1) = q₀</pre>
+  <b>In the order queue:</b> two threads simultaneously dequeue the same order entry because neither locked the queue first. Both attempt to process it — one delivery is lost, or the same order is dispatched twice.<br><br>
+  <b>Consequence:</b> lost updates, duplicated work, inconsistent state across the system.
 </div>
 
-<h3><span class="tag m6">6 marks</span> Q3c — Trace string acceptance</h3>
-<div class="box key">
-  <b>To check if a string is accepted:</b>
-  <ol>
-    <li>Start at q₀</li>
-    <li>Read one symbol at a time, follow the arrow</li>
-    <li>After reading entire string, check if current state is in F</li>
-    <li>If yes → <b>accepted</b>. If no → <b>rejected</b>.</li>
-  </ol>
-</div>
-<div class="box model">
-  <b>Example — trace "101" on DFA above:</b><br>
-  Start: q₀<br>
-  Read 1 → δ(q₀,1) = q₀<br>
-  Read 0 → δ(q₀,0) = q₁<br>
-  Read 1 → δ(q₁,1) = q₂<br>
-  End state: q₂ ∈ F → <b>ACCEPTED</b> ✅
-</div>
-
-<h3><span class="tag m4">4 marks</span> Q3d — DFA vs NFA</h3>
+<h3><span class="tag m6">6 marks</span> Q2c — Two synchronization mechanisms</h3>
 <table>
-  <tr><th></th><th>DFA</th><th>NFA</th></tr>
-  <tr><td><b>Transitions</b></td><td>Exactly <b>one</b> per state+input</td><td>Zero, one, or many</td></tr>
-  <tr><td><b>ε transitions</b></td><td>Not allowed</td><td>Allowed (move without input)</td></tr>
-  <tr><td><b>Acceptance</b></td><td>Deterministic path</td><td>Accept if <b>any</b> path ends in F</td></tr>
-  <tr><td><b>Power</b></td><td colspan="2">Equivalent — every NFA can be converted to a DFA</td></tr>
+  <tr><th>Mechanism</th><th>How it works</th><th>Maintains consistency by...</th></tr>
+  <tr>
+    <td><b>Mutex (Mutual Exclusion Lock)</b></td>
+    <td>Binary lock — only <b>one thread</b> can hold it at a time. Other threads block until it's released.</td>
+    <td>Ensuring only one thread modifies the order queue at any moment — no interleaved writes.</td>
+  </tr>
+  <tr>
+    <td><b>Semaphore</b></td>
+    <td>Counter-based — allows up to <b>N threads</b> through. Each acquire decrements, each release increments.</td>
+    <td>Limiting concurrent access to a resource pool (e.g. 5 DB connections) — prevents overload while allowing parallelism.</td>
+  </tr>
+  <tr>
+    <td><b>Monitor</b></td>
+    <td>High-level construct — methods are <b>auto-locked</b> on entry and unlocked on exit (Java <code>synchronized</code>).</td>
+    <td>Encapsulating lock management inside the object — programmers can't forget to release the lock.</td>
+  </tr>
 </table>
 
-<h3><span class="tag m3">3 marks</span> Q3e — Applications / limitations</h3>
+<h3><span class="tag m4">5 marks</span> Q2d — Thread pools</h3>
+<div class="box key">
+  <b>Thread pool:</b> a <b>fixed-size pool of pre-created worker threads</b> that are reused across tasks. When a new task arrives, it's handed to an idle worker; if all workers are busy, it queues until one is free. Threads are not destroyed after each task.
+</div>
 <div class="box model">
-  <b>Uses:</b>
-  <ul>
-    <li>Lexical analysis (tokenising source code)</li>
-    <li>Regex matching</li>
-    <li>Protocol design, UI state (login flows)</li>
-    <li>Hardware controllers (vending machines, traffic lights)</li>
-  </ul>
-  <b>Limitations:</b>
-  <ul>
-    <li><b>Finite memory</b> — can't count unboundedly (e.g. can't recognise aⁿbⁿ)</li>
-    <li>Can't match nested structures (brackets) — need a pushdown automaton (CFG)</li>
-  </ul>
+  <b>Two advantages for high-traffic systems:</b>
+  <ol>
+    <li><b>Reduced thread creation overhead</b> — creating a new thread is expensive (memory allocation, OS registration). Reusing existing threads avoids this cost for every task.</li>
+    <li><b>Better resource management</b> — the pool size caps concurrency. This prevents the system from spawning thousands of threads during peak traffic, which would exhaust memory and collapse performance.</li>
+  </ol>
 </div>
 
-<h3 style="color: var(--yellow);">⚡ FSM Exam Checklist</h3>
+<h3><span class="tag m4">4 marks</span> Q2e — Why excessive threading hurts performance</h3>
+<div class="box mistake">
+  <ol>
+    <li><b>Context-switching overhead</b> — the CPU spends increasing time saving/restoring thread state rather than executing real work. Past a threshold, adding more threads <b>reduces</b> throughput.</li>
+    <li><b>Memory exhaustion + lock contention</b> — every thread has its own stack (≈1 MB). Thousands of threads exhaust RAM. Plus, more threads competing for the same locks means most of them sit idle waiting — no real parallelism gained.</li>
+  </ol>
+</div>
+
+<h3>Bonus: Deadlock (may appear per Dr Ramzan)</h3>
 <div class="box warn">
-  Before handing in Q3, check:
+  <b>Deadlock:</b> two or more threads each hold a lock the other needs, so both wait forever.<br><br>
+  <b>Coffman's 4 conditions (all must hold):</b> mutual exclusion · hold-and-wait · no preemption · circular wait<br><br>
+  <b>Prevention:</b> enforce <b>lock ordering</b> — always acquire locks in a globally agreed sequence, so no cycle can form.
+</div>
+
+<h3 style="color: var(--yellow);">⚡ Concurrency Exam Checklist</h3>
+<div class="box warn">
+  Before handing in Q2, check:
   <ul>
-    <li>☐ State names are consistent (q₀, q₁, not Q0, Q1)</li>
-    <li>☐ Start state has an arrow pointing to it</li>
-    <li>☐ Accepting states have double circles</li>
-    <li>☐ Every state has a transition for every symbol in Σ (DFA)</li>
-    <li>☐ Δ function written as δ(q, a) = q' format</li>
-    <li>☐ If asked, verify with at least one string trace</li>
+    <li>☐ Named each technique explicitly (mutex, semaphore, monitor, thread pool)</li>
+    <li>☐ Tied every concept back to the food delivery scenario</li>
+    <li>☐ Explained <b>why</b> each mechanism helps, not just what it is</li>
+    <li>☐ Used "shared resource", "concurrent access", "data consistency" vocabulary</li>
+    <li>☐ Gave 2 advantages of thread pool (not 1)</li>
+    <li>☐ Gave 2 distinct reasons for excessive threading (not 1 re-worded)</li>
   </ul>
 </div>
 
@@ -684,105 +667,64 @@ post: self.enrolledCourses =
   </div>
 </details>
 
-<h3>🟩 Q3 — Finite State Machines</h3>
+<h3>🟩 Q2 — Food Delivery Platform</h3>
 
 <div class="q-intro">
-  <b>Scenario:</b> Mock Q3 centres on language L = { w ∈ {a,b}* | no two adjacent symbols are identical }.
+  <b>Scenario:</b> A food delivery platform processes thousands of orders simultaneously. Each thread verifies payment, assigns a driver, and updates the restaurant queue. During peak hours, threads contend for the driver database and order queue.
 </div>
 
 <details class="practice">
-  <summary>Q3a <span class="tag m4">5 marks</span> — What is an FSM? Describe main elements + how they process input.</summary>
+  <summary>Q2a <span class="tag m4">5 marks</span> — Why shared resources need synchronization (illustrate with driver database or order queue).</summary>
   <div class="answer">
-    An <b>FSM (Finite State Machine)</b> is a mathematical model of computation with a finite number of states that processes input one symbol at a time.<br><br>
-    <b>Main elements (5-tuple M = (Q, Σ, δ, q₀, F)):</b>
-    <ul>
-      <li><b>Q</b> — finite set of states</li>
-      <li><b>Σ</b> — alphabet of input symbols</li>
-      <li><b>δ</b> — transition function: Q × Σ → Q</li>
-      <li><b>q₀</b> — start state</li>
-      <li><b>F</b> — set of accepting (final) states</li>
-    </ul>
-    <b>How they work together:</b> The machine starts at q₀, reads the input string symbol by symbol, using δ to move to the next state each time. After reading the full string, if the current state is in F, the string is <b>accepted</b>; otherwise <b>rejected</b>.<br><br>
-    <b>Mark breakdown:</b> 2 marks (definition) + 2 marks (lists elements) + 1 mark (processing explanation).
+    In multithreaded systems, multiple threads execute concurrently and may read from or write to the same shared resource at the same time. Without synchronization, these operations <b>interleave unpredictably</b>, leading to inconsistent state or data corruption.<br><br>
+    <b>Example — driver database:</b> Two threads process two different orders simultaneously. Both read that driver #42 is "available", both update the record to assign them. Without synchronization, both succeed → the driver is double-booked, one delivery will fail.<br><br>
+    Synchronization mechanisms (locks, mutexes, semaphores) enforce <b>exclusive or controlled access</b> so that operations on the shared resource happen in a consistent order, preserving data integrity.<br><br>
+    <b>Mark breakdown:</b> 2 marks (concurrent access causes corruption) + 2 marks (driver/queue example) + 1 mark (names sync mechanism).
   </div>
 </details>
 
 <details class="practice">
-  <summary>Q3b <span class="tag m4">4 marks</span> — Difference between DFA and NFA.</summary>
+  <summary>Q2b <span class="tag m4">5 marks</span> — Define a race condition and describe how it could occur in the order queue.</summary>
   <div class="answer">
-    <b>DFA (Deterministic):</b> for every (state, input symbol) pair, there is <b>exactly one</b> transition to a next state. No ε-transitions allowed. The machine's path through states is fully determined.<br><br>
-    <b>NFA (Non-Deterministic):</b> a state may have <b>zero, one, or many</b> transitions on the same symbol. Also allows <b>ε-transitions</b> (move without consuming input). A string is accepted if <b>any</b> valid path ends in an accepting state.<br><br>
-    <b>Mark breakdown:</b> 2 marks DFA definition + 2 marks NFA definition.
+    A <b>race condition</b> occurs when two or more threads access a shared resource concurrently, and the <b>final outcome depends on the unpredictable order</b> in which their operations interleave. This leads to incorrect or inconsistent behaviour that may vary between runs.<br><br>
+    <b>In the order queue:</b> suppose Thread A and Thread B both attempt to dequeue the next order. Both read the head-of-queue pointer, both try to remove the same order, and both mark it "in progress". One order is processed twice (duplicate delivery), while the next order is skipped entirely because the pointer was only advanced once.<br><br>
+    <b>Consequence:</b> lost updates, duplicated work, inconsistent queue state, corrupted system records — all of which undermine customer trust and operational reliability.<br><br>
+    <b>Mark breakdown:</b> 2 marks (clear definition) + 2 marks (queue example with interleaving) + 1 mark (consequence).
   </div>
 </details>
 
 <details class="practice">
-  <summary>Q3c <span class="tag m6">6 marks</span> — Design a DFSM for L = { w ∈ {a,b}* | no two adjacent symbols are identical }.</summary>
+  <summary>Q2c <span class="tag m6">6 marks</span> — Two synchronization mechanisms + how each maintains data consistency.</summary>
   <div class="answer">
-    <b>States:</b> 4 total.
-    <ul>
-      <li><b>q₀</b> — start state (nothing read yet)</li>
-      <li><b>qₐ</b> — last symbol was 'a'</li>
-      <li><b>q_b</b> — last symbol was 'b'</li>
-      <li><b>q_dead</b> — violation detected (two identical in a row)</li>
-    </ul>
-    <b>Accepting states:</b> F = {q₀, qₐ, q_b} (empty string is accepted, any legal trailing symbol is accepted)<br><br>
-    <b>Transition table:</b>
-<pre>δ(q₀,    a) = qₐ         δ(q₀,    b) = q_b
-δ(qₐ,    a) = q_dead     δ(qₐ,    b) = q_b
-δ(q_b,   a) = qₐ         δ(q_b,   b) = q_dead
-δ(q_dead,a) = q_dead     δ(q_dead,b) = q_dead</pre>
-    <b>Diagram sketch:</b>
-<pre>        a           b
-   →(q₀)─────→(qₐ)────→(q_b)─── accepting chain
-        │ b    │ a      │ b
-        │      ↓ b      ↓ a
-        │    (q_b)    (qₐ)
-        ↓ a
-       (qₐ)
-    (q_dead non-accepting, traps on any input)</pre>
-    <b>Mark breakdown:</b>
-    <ul>
-      <li>1 mark — Correct start state</li>
-      <li>2 marks — Set of states representing last symbol read</li>
-      <li>1 mark — Correct accepting state(s)</li>
-      <li>2 marks — Correct transitions for a and b</li>
-    </ul>
+    <b>Mechanism 1 — Mutex (Mutual Exclusion Lock):</b><br>
+    A mutex is a binary lock that allows <b>only one thread at a time</b> to enter a critical section. A thread must acquire the lock before reading/writing the shared resource; any other thread attempting to acquire the same lock is blocked until the lock is released.<br>
+    <b>Maintains consistency by:</b> preventing interleaved writes to the order queue — only one thread can modify the queue at any moment, so race conditions are eliminated.<br><br>
+    <b>Mechanism 2 — Semaphore:</b><br>
+    A semaphore is a counter-based synchronization primitive. It allows up to <b>N concurrent threads</b> (acquire decrements the counter, release increments it). If the counter reaches zero, further threads block until one releases.<br>
+    <b>Maintains consistency by:</b> controlling access to a <b>pool of identical resources</b> (e.g. 10 database connections) — multiple threads can work in parallel, but not so many that the resource is overwhelmed.<br><br>
+    <b>(Monitor — backup answer):</b> a high-level construct where methods are automatically locked on entry and unlocked on exit (e.g. Java <code>synchronized</code>). Encapsulates lock management inside the object so programmers can't forget to release.<br><br>
+    <b>Mark breakdown:</b> 3 marks per mechanism × 2 = 6 marks.
   </div>
 </details>
 
 <details class="practice">
-  <summary>Q3d <span class="tag m4">5 marks</span> — Explain what L generates + 2 strings in L and 2 not in L.</summary>
+  <summary>Q2d <span class="tag m4">5 marks</span> — How a thread pool works + two advantages for high-traffic systems.</summary>
   <div class="answer">
-    L contains all strings over the alphabet {a, b} where <b>no two identical symbols appear next to each other</b>. In other words, the string alternates between 'a' and 'b' (though not necessarily starting with one or the other).<br><br>
-    <b>Strings IN L:</b>
-    <ul>
-      <li>"ab" ✅ (a then b, no repetition)</li>
-      <li>"bab" ✅ (b-a-b, alternating)</li>
-      <li>(also acceptable: "a", "b", "", "abab", "baba")</li>
-    </ul>
-    <b>Strings NOT in L:</b>
-    <ul>
-      <li>"aa" ❌ (two a's adjacent)</li>
-      <li>"bba" ❌ (two b's at start)</li>
-      <li>(also invalid: "abba", "aab", "bbb")</li>
-    </ul>
-    <b>Mark breakdown:</b> 2 marks (correct explanation) + 1.5 marks (2 valid in-L) + 1.5 marks (2 valid not-in-L).
+    A <b>thread pool</b> is a pre-created, <b>fixed-size collection of worker threads</b> that are reused across many tasks. When a new task arrives (e.g. a new order), it is submitted to the pool's queue; an idle worker picks it up, executes it, and returns to the pool ready for the next task. Threads are not destroyed between tasks.<br><br>
+    <b>Advantage 1 — Reduced thread creation overhead:</b> Creating a new thread is expensive (stack allocation, OS registration, initialisation). In a high-traffic system with thousands of orders per second, per-task thread creation would dominate CPU time. Reusing existing threads eliminates this cost.<br><br>
+    <b>Advantage 2 — Better resource management / bounded concurrency:</b> The pool caps the maximum number of simultaneous threads. This prevents the system from spawning an unbounded number of threads during a traffic spike, which would otherwise exhaust memory, cause lock contention, and crash the service.<br><br>
+    <b>Mark breakdown:</b> 2 marks (how it works) + 2 marks (advantage 1) + 1 mark (advantage 2).
   </div>
 </details>
 
 <details class="practice">
-  <summary>Q3e <span class="tag m4">5 marks</span> — What information must a DFSM remember to recognise L? Why sufficient?</summary>
+  <summary>Q2e <span class="tag m4">4 marks</span> — Two reasons excessive threading hurts system performance.</summary>
   <div class="answer">
-    The DFSM only needs to remember the <b>last symbol read</b>. That is why the design above has one state per possible "last symbol" (qₐ, q_b, plus q₀ for empty string).<br><br>
-    <b>Why this is sufficient:</b> The rule "no two adjacent symbols are identical" is a <b>local constraint</b> — it only compares the next symbol to the one immediately before it. There is no need to remember the full history of the string, count symbols, or track positions elsewhere. As long as the machine knows the last symbol it saw, it can correctly decide whether the next symbol breaks the rule.<br><br>
-    This is why a DFSM (with finite memory) is enough — a more powerful model like a pushdown automaton is only required when the constraint depends on unbounded counting or nested structure (e.g. matching parentheses).<br><br>
-    <b>Mark breakdown:</b>
-    <ul>
-      <li>2 marks — Must remember last symbol read</li>
-      <li>2 marks — Why that's enough for the adjacency check</li>
-      <li>1 mark — Clear reasoning about finite-memory sufficiency</li>
-    </ul>
+    <b>Reason 1 — Context-switching overhead:</b><br>
+    Each time the operating system switches between threads, it must save the current thread's state (registers, program counter, stack pointer) and load the next thread's state. With too many active threads, the CPU spends an increasing fraction of its time context-switching rather than executing real work — <b>throughput falls</b> as thread count grows past the sweet spot.<br><br>
+    <b>Reason 2 — Increased memory use and lock contention:</b><br>
+    Every thread has its own stack (typically ≈1 MB). Thousands of threads consume gigabytes of RAM purely for overhead. Additionally, more threads competing for the same locks means most of them sit <b>waiting</b> for locks to be released — no real parallelism is gained, and the "critical section" becomes a bottleneck.<br><br>
+    <b>Mark breakdown:</b> 2 marks per reason × 2 = 4 marks.
   </div>
 </details>
 
@@ -917,17 +859,16 @@ post: self.[attr] = self.[attr]@pre + [change]
 </div>
 
 <div class="box key">
-  <b>FSM keywords:</b>
+  <b>Concurrency keywords:</b>
   <ul>
-    <li><b>Q</b> — set of states</li>
-    <li><b>Σ</b> — alphabet (input symbols)</li>
-    <li><b>δ</b> — transition function (state × symbol → state)</li>
-    <li><b>q₀</b> — start state</li>
-    <li><b>F</b> — accepting (final) states</li>
-    <li><b>DFA</b> — one transition per input (deterministic)</li>
-    <li><b>NFA</b> — many transitions allowed (non-deterministic) + ε moves</li>
-    <li><b>Double circle</b> = accepting state in diagram</li>
-    <li><b>Limitation</b> — finite memory, can't count unboundedly</li>
+    <li><b>Race condition</b> — unpredictable result from unsynced shared access</li>
+    <li><b>Critical section</b> — code block that accesses a shared resource</li>
+    <li><b>Mutex</b> — binary lock, 1 thread at a time</li>
+    <li><b>Semaphore</b> — counter, up to N threads</li>
+    <li><b>Monitor</b> — high-level, auto-synced object</li>
+    <li><b>Thread pool</b> — reusable workers, cap concurrency, avoid creation cost</li>
+    <li><b>Deadlock</b> — circular wait on locks</li>
+    <li><b>Context switching</b> — CPU cost of swapping between threads</li>
   </ul>
 </div>
 
@@ -948,9 +889,9 @@ post: self.[attr] = self.[attr]@pre + [change]
   <b>Common mistakes to avoid:</b>
   <ul>
     <li>Writing invariants without <code>context</code> and <code>inv:</code></li>
-    <li>Missing transitions — every DFA state needs a transition for every symbol</li>
-    <li>Forgetting the double circle for accepting states</li>
-    <li>Writing δ function without showing (state, input) → next state format</li>
+    <li>Saying "race condition" without explaining <i>why</i> it's bad (corruption / lost updates)</li>
+    <li>Confusing mutex (1 thread) with semaphore (N threads)</li>
+    <li>Giving only 1 thread-pool advantage when the question asks for 2</li>
     <li>Answering Q5a with "affects reliability" — too vague, say WHAT goes wrong</li>
     <li>Forgetting to <b>define</b> the term before applying it</li>
   </ul>
@@ -962,10 +903,10 @@ post: self.[attr] = self.[attr]@pre + [change]
     <li><b>Invariant = always true</b>, pre = before, post = after</li>
     <li>OCL syntax: <code>context X inv:</code></li>
     <li><code>implies</code> = logical "if...then"</li>
-    <li>FSM = <b>(Q, Σ, δ, q₀, F)</b> — memorise this tuple cold</li>
-    <li>Double circle = accepting state, arrow-in = start state</li>
-    <li>DFA = 1 transition per input; NFA = many + ε allowed</li>
-    <li>Trace strings: start at q₀, follow arrows, check if end ∈ F</li>
+    <li>Race = unsynced shared write → data corruption</li>
+    <li>Mutex = 1, Semaphore = N, Monitor = auto-sync</li>
+    <li>Thread pool: avoids creation cost + caps concurrency</li>
+    <li>Excessive threads: context-switching + memory exhaustion</li>
     <li>Reliability risk: stale data → wrong decision → consequence</li>
     <li>Fault tolerance: redundancy + graceful degradation</li>
     <li>Single metric: DEFINE first, then multi-dimensional argument</li>
@@ -973,8 +914,78 @@ post: self.[attr] = self.[attr]@pre + [change]
 </div>
 
 <hr>
+
+<!-- ========== Q3 EMERGENCY BACKUP ========== -->
+<h2 id="backup">🆘 Q3 FSM — Emergency Backup</h2>
+
+<div class="box warn">
+  <b>Use only if:</b> Q1 or Q2 has a weirdly phrased scenario you can't parse, or you run out of ideas. Otherwise <b>stick with Q1 + Q2 + Q5</b> — they play to your strengths.
+</div>
+
+<details class="practice">
+  <summary>The FSM 5-tuple (cold memorisation)</summary>
+  <div class="answer">
+    <b>M = (Q, Σ, δ, q₀, F)</b>
+    <ul>
+      <li><b>Q</b> — finite set of states</li>
+      <li><b>Σ</b> (sigma) — alphabet (input symbols)</li>
+      <li><b>δ</b> (delta) — transition function Q × Σ → Q</li>
+      <li><b>q₀</b> — start state</li>
+      <li><b>F</b> — set of accepting (final) states</li>
+    </ul>
+  </div>
+</details>
+
+<details class="practice">
+  <summary>DFA vs NFA (quick diff)</summary>
+  <div class="answer">
+    <b>DFA:</b> exactly one transition per (state, symbol). No ε-transitions. Deterministic path.<br><br>
+    <b>NFA:</b> zero, one, or many transitions per (state, symbol). Allows ε-transitions (move without input). Accept if <b>any</b> path ends in F.<br><br>
+    Both are equivalent in power — every NFA can be converted to a DFA.
+  </div>
+</details>
+
+<details class="practice">
+  <summary>How to draw a DFSM (diagram rules)</summary>
+  <div class="answer">
+    <ul>
+      <li><b>Circle</b> = state (labelled q₀, q₁…)</li>
+      <li><b>Double circle</b> = accepting state</li>
+      <li><b>Arrow from nowhere</b> → start state</li>
+      <li><b>Arrow between states</b> labelled with input symbol</li>
+      <li>Every state must have a transition for <b>every</b> symbol in Σ (DFA)</li>
+    </ul>
+    <b>Example — "no two adjacent identical symbols" over {a,b}:</b>
+<pre>  →(q₀) ──a──→ (qₐ) ──b──→ (q_b)
+      │              ↕
+      └──b──→ (q_b) ──a──→ (qₐ)
+
+    qₐ ──a──→ (q_dead)
+    q_b ──b──→ (q_dead)
+    (q_dead loops on both a,b)
+
+    Accepting: {q₀, qₐ, q_b}</pre>
+  </div>
+</details>
+
+<details class="practice">
+  <summary>How to trace a string</summary>
+  <div class="answer">
+    1. Start at q₀<br>
+    2. For each symbol, apply δ to move to next state<br>
+    3. After consuming whole string, check if current state ∈ F<br>
+    4. If yes → <b>accepted</b>; if no → <b>rejected</b><br><br>
+    Always show your trace step-by-step in the answer — it gets partial marks even if the DFSM design is slightly off.
+  </div>
+</details>
+
+<div class="box key">
+  <b>If you need to attempt Q3 cold:</b> answer the terminology sub-parts first (Q3a, Q3b, Q3d, Q3e — all prose) and skip the DFSM diagram (Q3c) if you can't visualise it. You can still scrape ~12–15 marks from Q3 without drawing the diagram perfectly.
+</div>
+
+<hr>
 <p style="text-align:center; color: var(--muted); font-size: 13px;">
-  Pocket guide v3 · Q1 + Q3 + Q5 focus · Floor 60%, stretch 80%<br>
+  Pocket guide v4 · Q1 + Q2 + Q5 focus (Q3 backup) · Floor 60%, stretch 80%<br>
   <a href="index.html" style="color: var(--accent);">→ Full revision guide</a>
 </p>
 
