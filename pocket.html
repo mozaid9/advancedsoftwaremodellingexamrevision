@@ -278,11 +278,62 @@
 </div>
 <div class="box model">
   <b>Course Registration example:</b>
-  <pre>Student (id, name, feesOwed)
-   ├── *..4 enrolledCourses
-Course (code, name)
-   └── *..30 students</pre>
-  <b>Association:</b> Student —*..4 — Course —*..30
+  <svg viewBox="0 0 680 260" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; max-width:680px; margin-top:8px; background:#0a0d12; border-radius:6px;">
+    <style>
+      .cls-box { fill:#161b22; stroke:#58a6ff; stroke-width:2; }
+      .cls-name { font:bold 16px -apple-system,sans-serif; fill:#58a6ff; text-anchor:middle; }
+      .cls-attr { font:13px 'SF Mono',monospace; fill:#e6edf3; }
+      .cls-line { stroke:#e6edf3; stroke-width:1.5; fill:none; }
+      .cls-sep { stroke:#58a6ff; stroke-width:1; }
+      .cls-mult { font:bold 14px -apple-system,sans-serif; fill:#bc8cff; }
+      .cls-role { font:italic 12px -apple-system,sans-serif; fill:#8b949e; text-anchor:middle; }
+    </style>
+
+    <!-- Student class -->
+    <rect class="cls-box" x="20"  y="30" width="180" height="140" rx="4"/>
+    <line class="cls-sep" x1="20"  y1="60"  x2="200" y2="60"/>
+    <line class="cls-sep" x1="20"  y1="140" x2="200" y2="140"/>
+    <text class="cls-name" x="110" y="50">Student</text>
+    <text class="cls-attr" x="30"  y="78">- studentID : int</text>
+    <text class="cls-attr" x="30"  y="96">- name : String</text>
+    <text class="cls-attr" x="30"  y="114">- feesOwed : Real</text>
+    <text class="cls-attr" x="30"  y="158">+ enrollCourse()</text>
+
+    <!-- Enrollment class -->
+    <rect class="cls-box" x="250" y="60" width="180" height="110" rx="4"/>
+    <line class="cls-sep" x1="250" y1="90"  x2="430" y2="90"/>
+    <line class="cls-sep" x1="250" y1="140" x2="430" y2="140"/>
+    <text class="cls-name" x="340" y="80">Enrollment</text>
+    <text class="cls-attr" x="260" y="108">- enrollDate : Date</text>
+    <text class="cls-attr" x="260" y="126">- semester : String</text>
+    <text class="cls-attr" x="260" y="158">+ confirm()</text>
+
+    <!-- Course class -->
+    <rect class="cls-box" x="480" y="30" width="180" height="140" rx="4"/>
+    <line class="cls-sep" x1="480" y1="60"  x2="660" y2="60"/>
+    <line class="cls-sep" x1="480" y1="140" x2="660" y2="140"/>
+    <text class="cls-name" x="570" y="50">Course</text>
+    <text class="cls-attr" x="490" y="78">- courseCode : String</text>
+    <text class="cls-attr" x="490" y="96">- title : String</text>
+    <text class="cls-attr" x="490" y="114">- capacity = 30</text>
+    <text class="cls-attr" x="490" y="158">+ addStudent()</text>
+
+    <!-- Associations -->
+    <line class="cls-line" x1="200" y1="115" x2="250" y2="115"/>
+    <line class="cls-line" x1="430" y1="115" x2="480" y2="115"/>
+
+    <!-- Multiplicities -->
+    <text class="cls-mult" x="208" y="108">1</text>
+    <text class="cls-mult" x="232" y="108">0..4</text>
+    <text class="cls-mult" x="438" y="108">0..30</text>
+    <text class="cls-mult" x="466" y="108">1</text>
+    <text class="cls-role" x="225" y="132">has</text>
+    <text class="cls-role" x="455" y="132">for</text>
+
+    <!-- Caption -->
+    <text x="340" y="210" class="cls-role" style="fill:#8b949e;font-size:13px;">Student 0..4 ── Enrollment ── 0..30 Course</text>
+    <text x="340" y="232" class="cls-role" style="fill:#8b949e;font-size:12px;">(rules C1: ≤4 courses/student · C2: ≤30 students/course)</text>
+  </svg>
 </div>
 
 <h3><span class="tag m6">6 marks</span> Q1b — Three OCL invariants</h3>
@@ -584,13 +635,50 @@ post: self.enrolledCourses =
   <summary>Q1a <span class="tag m6">6 marks</span> — Draw a UML Class Diagram including Student, Course, and Enrollment.</summary>
   <div class="answer">
     <b>Model answer (6 marks breakdown):</b>
-    <pre>┌─────────────┐          ┌─────────────┐          ┌─────────────┐
-│   Student   │          │ Enrollment  │          │   Course    │
-├─────────────┤ 1      * ├─────────────┤ *      1 ├─────────────┤
-│ studentID   │──────────│ enrollDate  │──────────│ courseCode  │
-│ name        │          │ semester    │          │ title       │
-│ feesOwed    │          │             │          │ capacity=30 │
-└─────────────┘          └─────────────┘          └─────────────┘</pre>
+    <svg viewBox="0 0 680 260" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; max-width:680px; margin:8px 0; background:#0a0d12; border-radius:6px;">
+      <style>
+        .uml-box { fill:#161b22; stroke:#58a6ff; stroke-width:2; }
+        .uml-name { font:bold 16px -apple-system,sans-serif; fill:#58a6ff; text-anchor:middle; }
+        .uml-attr { font:13px 'SF Mono',monospace; fill:#e6edf3; }
+        .uml-line { stroke:#e6edf3; stroke-width:1.5; fill:none; }
+        .uml-sep { stroke:#58a6ff; stroke-width:1; }
+        .uml-mult { font:bold 14px -apple-system,sans-serif; fill:#bc8cff; }
+        .uml-role { font:italic 12px -apple-system,sans-serif; fill:#8b949e; text-anchor:middle; }
+      </style>
+      <rect class="uml-box" x="20"  y="30" width="180" height="140" rx="4"/>
+      <line class="uml-sep" x1="20"  y1="60"  x2="200" y2="60"/>
+      <line class="uml-sep" x1="20"  y1="140" x2="200" y2="140"/>
+      <text class="uml-name" x="110" y="50">Student</text>
+      <text class="uml-attr" x="30"  y="78">- studentID : int</text>
+      <text class="uml-attr" x="30"  y="96">- name : String</text>
+      <text class="uml-attr" x="30"  y="114">- feesOwed : Real</text>
+      <text class="uml-attr" x="30"  y="158">+ enrollCourse()</text>
+      <rect class="uml-box" x="250" y="60" width="180" height="110" rx="4"/>
+      <line class="uml-sep" x1="250" y1="90"  x2="430" y2="90"/>
+      <line class="uml-sep" x1="250" y1="140" x2="430" y2="140"/>
+      <text class="uml-name" x="340" y="80">Enrollment</text>
+      <text class="uml-attr" x="260" y="108">- enrollDate : Date</text>
+      <text class="uml-attr" x="260" y="126">- semester : String</text>
+      <text class="uml-attr" x="260" y="158">+ confirm()</text>
+      <rect class="uml-box" x="480" y="30" width="180" height="140" rx="4"/>
+      <line class="uml-sep" x1="480" y1="60"  x2="660" y2="60"/>
+      <line class="uml-sep" x1="480" y1="140" x2="660" y2="140"/>
+      <text class="uml-name" x="570" y="50">Course</text>
+      <text class="uml-attr" x="490" y="78">- courseCode : String</text>
+      <text class="uml-attr" x="490" y="96">- title : String</text>
+      <text class="uml-attr" x="490" y="114">- capacity = 30</text>
+      <text class="uml-attr" x="490" y="158">+ addStudent()</text>
+      <line class="uml-line" x1="200" y1="115" x2="250" y2="115"/>
+      <line class="uml-line" x1="430" y1="115" x2="480" y2="115"/>
+      <text class="uml-mult" x="208" y="108">1</text>
+      <text class="uml-mult" x="232" y="108">0..4</text>
+      <text class="uml-mult" x="438" y="108">0..30</text>
+      <text class="uml-mult" x="466" y="108">1</text>
+      <text class="uml-role" x="225" y="132">has</text>
+      <text class="uml-role" x="455" y="132">for</text>
+      <text x="340" y="210" class="uml-role" style="fill:#8b949e;font-size:13px;">Student 0..4 ── Enrollment ── 0..30 Course</text>
+      <text x="340" y="232" class="uml-role" style="fill:#8b949e;font-size:12px;">C1: ≤ 4 courses/student · C2: ≤ 30 students/course · C3: fees paid before enrolling</text>
+    </svg>
     <b>Mark breakdown:</b>
     <ul>
       <li>1 mark — Student class with attributes</li>
@@ -955,16 +1043,87 @@ post: self.[attr] = self.[attr]@pre + [change]
       <li><b>Arrow between states</b> labelled with input symbol</li>
       <li>Every state must have a transition for <b>every</b> symbol in Σ (DFA)</li>
     </ul>
-    <b>Example — "no two adjacent identical symbols" over {a,b}:</b>
-<pre>  →(q₀) ──a──→ (qₐ) ──b──→ (q_b)
-      │              ↕
-      └──b──→ (q_b) ──a──→ (qₐ)
+    <b>Example — DFSM that accepts "no two adjacent identical symbols" over {a,b}:</b>
+    <svg viewBox="0 0 640 360" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; max-width:640px; margin-top:8px; background:#0a0d12; border-radius:6px;">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#e6edf3"/>
+        </marker>
+      </defs>
+      <style>
+        .fsm-state  { fill:#161b22; stroke:#58a6ff; stroke-width:2; }
+        .fsm-accept { fill:#161b22; stroke:#3fb950; stroke-width:2; }
+        .fsm-dead   { fill:#161b22; stroke:#f85149; stroke-width:2; stroke-dasharray:4,3; }
+        .fsm-label  { font:bold 16px -apple-system,sans-serif; fill:#e6edf3; text-anchor:middle; dominant-baseline:central; }
+        .fsm-edge   { stroke:#e6edf3; stroke-width:1.5; fill:none; marker-end:url(#arr); }
+        .fsm-sym    { font:bold 15px 'SF Mono',monospace; fill:#bc8cff; text-anchor:middle; }
+        .fsm-caption{ font:italic 12px -apple-system,sans-serif; fill:#8b949e; text-anchor:middle; }
+      </style>
 
-    qₐ ──a──→ (q_dead)
-    q_b ──b──→ (q_dead)
-    (q_dead loops on both a,b)
+      <!-- start arrow -->
+      <line class="fsm-edge" x1="30" y1="140" x2="75" y2="140"/>
+      <text class="fsm-caption" x="52" y="128">start</text>
 
-    Accepting: {q₀, qₐ, q_b}</pre>
+      <!-- q0 (accepting double-circle) -->
+      <circle class="fsm-accept" cx="120" cy="140" r="36"/>
+      <circle class="fsm-accept" cx="120" cy="140" r="30"/>
+      <text class="fsm-label" x="120" y="140">q₀</text>
+
+      <!-- qa (accepting) -->
+      <circle class="fsm-accept" cx="320" cy="60" r="36"/>
+      <circle class="fsm-accept" cx="320" cy="60" r="30"/>
+      <text class="fsm-label" x="320" y="60">qₐ</text>
+
+      <!-- qb (accepting) -->
+      <circle class="fsm-accept" cx="320" cy="220" r="36"/>
+      <circle class="fsm-accept" cx="320" cy="220" r="30"/>
+      <text class="fsm-label" x="320" y="220">q_b</text>
+
+      <!-- q_dead (non-accepting, dashed red) -->
+      <circle class="fsm-dead" cx="520" cy="140" r="36"/>
+      <text class="fsm-label" x="520" y="140">q_dead</text>
+
+      <!-- q0 -> qa on 'a' -->
+      <path class="fsm-edge" d="M 150,120 Q 220,70 285,70"/>
+      <text class="fsm-sym" x="220" y="85">a</text>
+
+      <!-- q0 -> qb on 'b' -->
+      <path class="fsm-edge" d="M 150,160 Q 220,210 285,210"/>
+      <text class="fsm-sym" x="220" y="200">b</text>
+
+      <!-- qa -> qb on 'b' -->
+      <path class="fsm-edge" d="M 320,96 Q 270,140 320,184"/>
+      <text class="fsm-sym" x="255" y="145">b</text>
+
+      <!-- qb -> qa on 'a' -->
+      <path class="fsm-edge" d="M 355,190 Q 395,140 355,90"/>
+      <text class="fsm-sym" x="390" y="145">a</text>
+
+      <!-- qa -> q_dead on 'a' -->
+      <path class="fsm-edge" d="M 355,60 Q 440,60 490,115"/>
+      <text class="fsm-sym" x="430" y="50">a</text>
+
+      <!-- qb -> q_dead on 'b' -->
+      <path class="fsm-edge" d="M 355,220 Q 440,220 490,170"/>
+      <text class="fsm-sym" x="430" y="240">b</text>
+
+      <!-- q_dead self-loop a,b -->
+      <path class="fsm-edge" d="M 542,104 Q 600,60 580,140 Q 600,220 542,178"/>
+      <text class="fsm-sym" x="605" y="145">a, b</text>
+
+      <!-- Legend -->
+      <circle class="fsm-accept" cx="40" cy="320" r="9"/>
+      <circle class="fsm-accept" cx="40" cy="320" r="6"/>
+      <text class="fsm-caption" x="90" y="320" style="text-anchor:start">= accepting</text>
+      <circle class="fsm-dead" cx="210" cy="320" r="9"/>
+      <text class="fsm-caption" x="230" y="320" style="text-anchor:start">= dead/reject</text>
+      <text class="fsm-caption" x="540" y="320" style="text-anchor:end">Accepting: {q₀, qₐ, q_b}</text>
+    </svg>
+    <b>Transition function:</b>
+<pre>δ(q₀, a)    = qₐ       δ(q₀, b)    = q_b
+δ(qₐ, a)    = q_dead   δ(qₐ, b)    = q_b
+δ(q_b, a)   = qₐ       δ(q_b, b)   = q_dead
+δ(q_dead,·) = q_dead   (traps)</pre>
   </div>
 </details>
 
